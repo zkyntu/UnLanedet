@@ -1,0 +1,7 @@
+fvcore
+cloudpickle
+omegaconf
+scikit-learn
+albumentations
+shapely
+imgaug
