@@ -33,8 +33,8 @@ img_norm = dict(
     mean=[103.939, 116.779, 123.68],
     std=[1., 1., 1.]
 )
-data_root = "/root/autodl-tmp/tusimple"
-#work_dir = "./tusimple"
+data_root = ""
+work_dir = "./tusimple"
 
 # model config
 model = L(UFLD)(
@@ -57,7 +57,7 @@ model = L(UFLD)(
 # Trainer config
 train = get_config("config/common/train.py").train
 epochs = 40
-batch_size = 24
+batch_size = 4
 epoch_per_iter = (3616 // batch_size + 1)
 total_iter = epoch_per_iter * epochs 
 train.max_iter = total_iter
@@ -94,8 +94,6 @@ val_process = [
     L(Normalize)(img_norm=img_norm),
     L(ToTensor)(keys=['img', 'cls_label']),
 ]
-
-#import pdb;pdb.set_trace()
 
 # Dataset config
 dataloader = get_config("config/common/tusimple.py").dataloader
