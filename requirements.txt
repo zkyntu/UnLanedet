@@ -5,3 +5,5 @@ scikit-learn
 albumentations
 shapely
 imgaug
+albucore
+scikit-image

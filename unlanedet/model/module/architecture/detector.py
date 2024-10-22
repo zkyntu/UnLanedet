@@ -23,7 +23,6 @@ class Detector(nn.Module):
         return move_device_like(x, self.device_tensor)
 
     def to_cuda(self, batch):
-#        import pdb;pdb.set_trace()
         for k in batch:
             if not isinstance(batch[k], torch.Tensor):
                 continue
@@ -36,7 +35,6 @@ class Detector(nn.Module):
     def forward(self, batch):
         output = {}
         batch = self.to_cuda(batch)
-#        import pdb;pdb.set_trace()
         fea = self.backbone(batch['img'])
 
         if self.aggregator:
