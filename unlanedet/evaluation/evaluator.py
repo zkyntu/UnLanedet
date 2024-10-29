@@ -1,4 +1,5 @@
 import os
+import tqdm
 import datetime
 import logging
 import time
@@ -10,6 +11,7 @@ from typing import List, Union
 import torch
 from torch import nn
 
+from . import culane_metric
 from .tusimple_metric import LaneEval
 from ..utils.comm import get_world_size, is_main_process
 from ..utils.logger import log_every_n_seconds
@@ -67,6 +69,9 @@ class DatasetEvaluator:
 
 
 class TusimpleEvaluator(DatasetEvaluator):
+    """
+    Evaluator of the Tusimple dataset
+    """
     def __init__(self,
                  ori_img_h,
                  ori_img_w,
@@ -116,6 +121,97 @@ class TusimpleEvaluator(DatasetEvaluator):
         result, acc = LaneEval.bench_one_submit(pred_filename, self.test_json_file)
         print(result)
         return dict(acc=acc)
+    
+class CULaneEvaluator(DatasetEvaluator):
+    """
+    Evaluator of the CULane dataset
+    """
+    def __init__(self,
+                 data_root,
+                 ori_img_h,
+                 ori_img_w,
+                 output_basedir="",
+                 cfg=None):
+        self.logger = logging.getLogger(__name__)
+        self.data_root = data_root
+        self.ori_img_w = ori_img_w
+        self.ori_img_h = ori_img_h
+        self.output_basedir = output_basedir
+        LIST_FILE = {
+            'train': 'list/train_gt.txt',
+            'val': 'list/test.txt',
+            'test': 'list/test.txt',
+        } 
+        self.list_path = os.path.join(data_root, LIST_FILE['test'])
+        self.cfg = cfg
+        self.load_annotations()
+
+    def load_annotations(self):
+        self.logger.info('Loading CULane annotations for evaluation...')
+        self.data_infos = []
+        with open(self.list_path) as list_file:
+            for line in list_file:
+                infos = self.load_annotation(line.split())
+                self.data_infos.append(infos)
+
+    def load_annotation(self, line):
+        infos = {}
+        img_line = line[0]
+        img_line = img_line[1 if img_line[0] == '/' else 0::]
+        img_path = os.path.join(self.data_root, img_line)
+        infos['img_name'] = img_line 
+        infos['img_path'] = img_path
+        if len(line) > 1:
+            mask_line = line[1]
+            mask_line = mask_line[1 if mask_line[0] == '/' else 0::]
+            mask_path = os.path.join(self.data_root, mask_line)
+            infos['mask_path'] = mask_path
+
+        if len(line) > 2:
+            exist_list = [int(l) for l in line[2:]]
+            infos['lane_exist'] = np.array(exist_list)
+
+        anno_path = img_path[:-3] + 'lines.txt'  # remove sufix jpg and add lines.txt
+        with open(anno_path, 'r') as anno_file:
+            data = [list(map(float, line.split())) for line in anno_file.readlines()]
+        lanes = [[(lane[i], lane[i + 1]) for i in range(0, len(lane), 2) if lane[i] >= 0 and lane[i + 1] >= 0]
+                 for lane in data]
+        lanes = [list(set(lane)) for lane in lanes]  # remove duplicated points
+        lanes = [lane for lane in lanes if len(lane) > 3]  # remove lanes with less than 2 points
+
+        lanes = [sorted(lane, key=lambda x: x[1]) for lane in lanes]  # sort by y
+        infos['lanes'] = lanes
+
+        return infos
+
+    def get_prediction_string(self, pred):
+        ys = np.array(list(self.cfg.sample_y))[::-1] / self.ori_img_h
+        out = []
+        for lane in pred:
+            xs = lane(ys)
+            valid_mask = (xs >= 0) & (xs < 1)
+            xs = xs * self.ori_img_w
+            lane_xs = xs[valid_mask]
+            lane_ys = ys[valid_mask] * self.ori_img_h
+            lane_xs, lane_ys = lane_xs[::-1], lane_ys[::-1]
+            lane_str = ' '.join(['{:.5f} {:.5f}'.format(x, y) for x, y in zip(lane_xs, lane_ys)])
+            if lane_str != '':
+                out.append(lane_str)
+
+        return '\n'.join(out)
+
+    def evaluate(self, predictions):
+        print('Generating prediction output...')
+        for idx, pred in enumerate(tqdm(predictions)):
+            output_dir = os.path.join(self.output_basedir, os.path.dirname(self.data_infos[idx]['img_name']))
+            output_filename = os.path.basename(self.data_infos[idx]['img_name'])[:-3] + 'lines.txt'
+            os.makedirs(output_dir, exist_ok=True)
+            output = self.get_prediction_string(pred)
+            with open(os.path.join(output_dir, output_filename), 'w') as out_file:
+                out_file.write(output)
+        result = culane_metric.eval_predictions(self.output_basedir, self.data_root, self.list_path, official=True)
+        print(result)
+        return result['F1']
 
 class DatasetEvaluators(DatasetEvaluator):
     """
@@ -219,18 +315,16 @@ def inference_on_dataset(
 
             start_compute_time = time.perf_counter()
             dict.get(callbacks or {}, "before_inference", lambda: None)()
-#            import pdb;pdb.set_trace()
             outputs = model(inputs)
             if hasattr(model,"get_lanes"):
                 outputs = model.get_lanes(outputs)
-            prediction.extend(outputs)
             dict.get(callbacks or {}, "after_inference", lambda: None)()
             if torch.cuda.is_available():
                 torch.cuda.synchronize()
             total_compute_time += time.perf_counter() - start_compute_time
 
             start_eval_time = time.perf_counter()
-#            prediction.extend(outputs)
+            prediction.extend(outputs)
             # evaluator.process(inputs, outputs)
             total_eval_time += time.perf_counter() - start_eval_time
 
@@ -273,7 +367,6 @@ def inference_on_dataset(
     )
     
     # for evaluation
-#    import pdb;pdb.set_trace()
     results = evaluator.evaluate(prediction)
     # An evaluator may return None when not in main process.
     # Replace it by an empty dict instead to make it easier for downstream code to handle
