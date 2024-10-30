@@ -1,5 +1,5 @@
 import os
-import tqdm
+from tqdm import tqdm
 import datetime
 import logging
 import time
