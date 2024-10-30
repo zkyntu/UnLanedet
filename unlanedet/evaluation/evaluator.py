@@ -210,8 +210,7 @@ class CULaneEvaluator(DatasetEvaluator):
             with open(os.path.join(output_dir, output_filename), 'w') as out_file:
                 out_file.write(output)
         result = culane_metric.eval_predictions(self.output_basedir, self.data_root, self.list_path, official=True)
-        print(result)
-        return result['F1']
+        return result
 
 class DatasetEvaluators(DatasetEvaluator):
     """
