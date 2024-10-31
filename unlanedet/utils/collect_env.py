@@ -69,18 +69,18 @@ def collect_env_info():
     data.append(("numpy", np.__version__))
 
     try:
-        import detectron2  # noqa
+        import unlanedet  # noqa
 
         data.append(
             (
-                "detectron2",
-                detectron2.__version__ + " @" + os.path.dirname(detectron2.__file__),
+                "unlanedet",
+                unlanedet.__version__ + " @" + os.path.dirname(unlanedet.__file__),
             )
         )
     except ImportError:
-        data.append(("detectron2", "failed to import"))
+        data.append(("unlanedet", "failed to import"))
     except AttributeError:
-        data.append(("detectron2", "imported a wrong installation"))
+        data.append(("unlanedet", "imported a wrong installation"))
 
     try:
         import detectron2._C as _C
@@ -236,7 +236,7 @@ def _test_nccl_worker(rank, num_gpu, dist_url):
 def main() -> None:
     global x
     try:
-        from detectron2.utils.collect_env import collect_env_info as f
+        from .collect_env import collect_env_info as f
 
         print(f())
     except ImportError:
