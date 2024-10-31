@@ -42,13 +42,13 @@ def setup_logger(
     distributed_rank=0,
     *,
     color=True,
-    name="detectron2",
+    name="unlanedet",
     abbrev_name=None,
     enable_propagation: bool = False,
     configure_stdout: bool = True
 ):
     """
-    Initialize the detectron2 logger and set its verbosity level to "DEBUG".
+    Initialize the unlanedet logger and set its verbosity level to "DEBUG".
 
     Args:
         output (str): a file name or a directory to save log. If None, will not save log file.
@@ -57,7 +57,7 @@ def setup_logger(
         name (str): the root module name of this logger
         abbrev_name (str): an abbreviation of the module, to avoid long names in logs.
             Set to "" to not log the root module in logs.
-            By default, will abbreviate "detectron2" to "d2" and leave other
+            By default, will abbreviate "unlanedet" to "d2" and leave other
             modules unchanged.
         enable_propagation (bool): whether to propagate logs to the parent logger.
         configure_stdout (bool): whether to configure logging to stdout.
@@ -71,7 +71,7 @@ def setup_logger(
     logger.propagate = enable_propagation
 
     if abbrev_name is None:
-        abbrev_name = "d2" if name == "detectron2" else name
+        abbrev_name = "Ld" if name == "unlanedet" else name
 
     plain_formatter = logging.Formatter(
         "[%(asctime)s] %(name)s %(levelname)s: %(message)s", datefmt="%m/%d %H:%M:%S"
@@ -149,7 +149,7 @@ def _find_caller():
         if os.path.join("utils", "logger.") not in code.co_filename:
             mod_name = frame.f_globals["__name__"]
             if mod_name == "__main__":
-                mod_name = "detectron2"
+                mod_name = "unlanedet"
             return mod_name, (code.co_filename, frame.f_lineno, code.co_name)
         frame = frame.f_back
 
@@ -252,7 +252,7 @@ def create_small_table(small_dict):
 
 def _log_api_usage(identifier: str):
     """
-    Internal function used to log the usage of different detectron2 components
+    Internal function used to log the usage of different unlanedet components
     inside facebook's infra.
     """
-    torch._C._log_api_usage_once("detectron2." + identifier)
+    torch._C._log_api_usage_once("unlanedet." + identifier)
