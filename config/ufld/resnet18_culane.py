@@ -119,5 +119,6 @@ dataloader.test.dataset.cfg = param_config
 dataloader.test.total_batch_size = batch_size
 
 # Evaluation config
+dataloader.evaluator.data_root = data_root
 dataloader.evaluator.output_basedir = "./output"
 dataloader.evaluator.cfg=param_config
