@@ -7,3 +7,4 @@ shapely
 imgaug
 albucore
 scikit-image
+p_tqdm
