@@ -1,5 +1,7 @@
 import setuptools
 import sys
+import glob
+from torch.utils.cpp_extension import CUDAExtension, BuildExtension
 
 import unlanedet
 
@@ -7,6 +9,22 @@ long_description = "A Tookit for lane detection based on PaddlePaddle"
 
 with open("requirements.txt") as file:
     REQUIRED_PACKAGES = file.read()
+
+def get_extensions():
+    extensions = []
+
+    op_files = glob.glob('./unlanedet/layers/ops/csrc/*.c*')
+    extension = CUDAExtension
+    ext_name = 'unlanedet.layers.ops.nms_impl'
+
+    ext_ops = extension(
+        name=ext_name,
+        sources=op_files,
+    )
+
+    extensions.append(ext_ops)
+
+    return extensions
 
 setuptools.setup(
     name="unlanedet",
@@ -19,12 +37,15 @@ setuptools.setup(
     url="https://github.com/zkyseu/PPlanedet",
     packages=setuptools.find_packages(),
     include_package_data=True,
-    setup_requires=['cython', 'numpy'],
+    setup_requires=['cython', 'numpy', 'pytest-runner'],
     install_requires=REQUIRED_PACKAGES,
     classifiers=[
         "Programming Language :: Python :: 3",
         "License :: OSI Approved :: MIT License",
         "Operating System :: OS Independent",
     ],
+    tests_require=['pytest'],
+    ext_modules=get_extensions(),
+    cmdclass={'build_ext': BuildExtension},
     license='MIT License',
     entry_points={'console_scripts': ['pplanedet=pplanedet.command:main', ]})

@@ -380,6 +380,7 @@ class SimpleTrainer(TrainerBase):
             data_time (float): time taken by the dataloader iteration
             prefix (str): prefix for logging keys
         """
+#        import pdb;pdb.set_trace()
         metrics_dict = {k: v.detach().cpu().item() for k, v in loss_dict.items()}
         metrics_dict["data_time"] = data_time
 
@@ -412,6 +413,10 @@ class SimpleTrainer(TrainerBase):
             storage.put_scalar(
                 "{}total_loss".format(prefix), total_losses_reduced, cur_iter=cur_iter
             )
+            
+            for k,v in metrics_dict.items():
+                storage.put_scalar(f"{k}",v,cur_iter = cur_iter)
+
             if len(metrics_dict) > 1:
                 storage.put_scalars(cur_iter=cur_iter, **metrics_dict)
 

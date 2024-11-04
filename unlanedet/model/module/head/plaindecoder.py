@@ -15,8 +15,13 @@ class PlainDecoder(nn.Module):
 
         x = self.dropout(x)
         x = self.conv8(x)
-        x = F.interpolate(x, size=[self.cfg.img_height,  self.cfg.img_width],
-                           mode='bilinear', align_corners=False)
+        try:
+            x = F.interpolate(x, size=[self.cfg.img_height,  self.cfg.img_width],
+                               mode='bilinear', align_corners=False)
+        except:
+            x = F.interpolate(x, size=[self.cfg.img_h,  self.cfg.img_w],
+                               mode='bilinear', align_corners=False)
+        
 
         output = {'seg': x}
 
