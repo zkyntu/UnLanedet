@@ -225,8 +225,6 @@ class CLRHead(nn.Module):
                 batch_size, -1, cls_logits.shape[1])  # (B, num_priors, 2)
             reg = reg.reshape(batch_size, -1, reg.shape[1])
 
-#            import pdb;pdb.set_trace()
-
             predictions = priors.clone()
             predictions[:, :, :2] = cls_logits
 
@@ -269,7 +267,6 @@ class CLRHead(nn.Module):
             output = {'predictions_lists': predictions_lists}
             output.update(**seg)
             return output
-#            return self.loss(output, kwargs['batch'])
 
         return predictions_lists[-1]
 
@@ -322,7 +319,6 @@ class CLRHead(nn.Module):
              xyt_loss_weight=0.5,
              iou_loss_weight=2.,
              seg_loss_weight=1.):
-#        import pdb;pdb.set_trace()
         if 'cls_loss_weight' in self.cfg:
             cls_loss_weight = self.cfg.cls_loss_weight
         if 'xyt_loss_weight' in self.cfg:
@@ -400,7 +396,6 @@ class CLRHead(nn.Module):
                     self.img_w, length=15)
 
         # extra segmentation loss
-#        import pdb;pdb.set_trace()
         seg_loss = self.criterion(F.log_softmax(output['seg'], dim=1),batch['seg'].long())
 
         cls_loss /= (len(targets) * self.refine_layers)
