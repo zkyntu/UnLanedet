@@ -25,7 +25,6 @@ class SCNN_AGG(nn.Module):
 
         for i in range(x.shape[3] - 2, 0, -1):
             x[..., i:i+1] = x[..., i:i+1].clone() + F.relu(self.conv_l(x[..., i+1:i+2].clone()))
-            # x[..., i:i+1].add_(F.relu(self.conv_l(x[..., i+1:i+2])))
         return x
 
 class SCNN(Detector):
