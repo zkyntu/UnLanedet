@@ -1,1 +1,1 @@
-from .focal_loss import SoftmaxFocalLoss
+from .focal_loss import SoftmaxFocalLoss, FocalLoss
