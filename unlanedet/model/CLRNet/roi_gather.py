@@ -36,7 +36,7 @@ class ROIGather(nn.Module):
                  sample_points,
                  fc_hidden_dim,
                  refine_layers,
-                 mid_channels=48,
+                 mid_channels=64,
                  norm_type="BN"):
         super(ROIGather, self).__init__()
         self.in_channels = in_channels
