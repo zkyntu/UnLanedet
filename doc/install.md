@@ -1,0 +1,44 @@
+## Installation step
+<font size=4> In this documentation, we describe the installation step by step.
+
+### Docker installation (recommendation)
+<font size=4>1. Pull the Pytorch docker image.
+
+<font size=3>
+
+```Shell
+docker pull pytorch/pytorch:2.3.1-cuda12.1-cudnn8-devel
+```
+
+<font size=4>2. Create the container
+
+<font size=3>
+
+```Shell
+docker create --gpus all --name ldet -v $PWD:/home --shm-size 20G --network=host -it pytorch/pytorch:2.3.1-cuda12.1-cudnn8-devel /bin/bash
+
+docker start ldet
+
+docker exec -it ldet bash
+```
+
+<font size=4>3. Install the requirements
+
+<font size=3>
+
+```Shell
+cd /home/UnLanedet
+pip install -r requirements.txt
+pip install hydra-core --upgrade
+python setup.py build develop
+```
+
+### Pip Installation
+<font size=3>
+
+```Shell
+cd UnLanedet
+pip install -r requirements.txt
+pip install hydra-core --upgrade
+python setup.py build develop
+```
