@@ -15,12 +15,14 @@ class PlainDecoder(nn.Module):
 
         x = self.dropout(x)
         x = self.conv8(x)
-        try:
+        if 'img_height' in self.cfg:
             x = F.interpolate(x, size=[self.cfg.img_height,  self.cfg.img_width],
                                mode='bilinear', align_corners=False)
-        except:
+        elif 'img_h' in self.cfg:
             x = F.interpolate(x, size=[self.cfg.img_h,  self.cfg.img_w],
                                mode='bilinear', align_corners=False)
+        else:
+            raise RuntimeError("img width does not in the cfg, check it")
         
 
         output = {'seg': x}
