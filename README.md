@@ -21,6 +21,9 @@ We provide a set of lane detection methods, including segmentation-based and anc
 ## License
 UnLanedet is released under the Apache 2.0 license.
 
+## Acknowledgement
+UnLanedet is built upon [detectron2](https://github.com/facebookresearch/detectron2) and [lanedet](https://github.com/Turoad/lanedet). Many thanks to their great work!
+
 ## Citing UnLanedet
 If you use UnLanedet in your research, please use the following BibTeX entry.
 
