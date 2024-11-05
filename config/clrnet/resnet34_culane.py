@@ -35,7 +35,7 @@ ignore_label = 255
 bg_weight = 0.4
 featuremap_out_channel = 192
 num_classes = 4 + 1
-data_root = "/home/dataset/culane"
+data_root = "/root/autodl-tmp/culane"
 
 param_config = OmegaConf.create()
 param_config.iou_loss_weight = iou_loss_weight
@@ -81,7 +81,7 @@ model = L(CLRNet)(
 
 train = get_config("config/common/train.py").train
 epochs =15
-batch_size = 24
+batch_size = 48
 epoch_per_iter = (88880 // batch_size + 1)
 total_iter = epoch_per_iter * epochs 
 train.max_iter = total_iter
@@ -93,7 +93,7 @@ optimizer.lr = 0.6e-3
 optimizer.weight_decay = 0.01
 
 lr_multiplier = L(CosineParamScheduler)(
-    start_value = 1,
+    start_value = 1.0,
     end_value = 0.001
 )
 
@@ -153,7 +153,7 @@ dataloader.train.dataset.cfg = param_config
 dataloader.train.total_batch_size = batch_size
 dataloader.test.dataset.processes = val_process
 dataloader.test.dataset.data_root = data_root
-dataloader.train.dataset.cut_height = cut_height
+dataloader.test.dataset.cut_height = cut_height
 dataloader.test.dataset.cfg = param_config
 dataloader.test.total_batch_size = batch_size
 
