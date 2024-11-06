@@ -39,5 +39,6 @@ dataloader.evaluator = L(CULaneEvaluator)(
     data_root = "./",
     ori_img_h=ori_img_h,
     ori_img_w=ori_img_w,
-    output_basedir="./"
+    output_basedir="./",
+    metric = "F1"
 )
