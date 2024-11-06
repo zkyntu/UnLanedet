@@ -1,5 +1,5 @@
 ## Installation step
-<font size=4> In this documentation, we describe the installation step by step.
+<font size=4> In this documentation, we introduce the installation step by step.
 
 ### Docker installation (recommendation)
 <font size=4>1. Pull the Pytorch docker image.
