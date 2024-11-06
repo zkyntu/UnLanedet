@@ -1,8 +1,20 @@
 import random
 import collections
+from typing import List
 
 import albumentations as al
 import numpy as np
+import omegaconf
+from omegaconf import DictConfig
+
+def convert_dictconfig_to_dict(config):
+    if isinstance(config, DictConfig):
+        new_dict = {}
+        for key, value in config.items():
+            new_dict[key] = convert_dictconfig_to_dict(value)
+        return new_dict
+    else:
+        return config
 
 class Alaug(object):
 
@@ -14,7 +26,11 @@ class Alaug(object):
         self.transforms = []
         self.bbox_params = None
         self.keypoint_params = None
+        transforms = [convert_dictconfig_to_dict(tr) for tr in transforms]
+#        transforms = convert_dictconfig_to_dict(transforms)
 
+        
+#        import pdb;pdb.set_trace()
         for transform in transforms:
             if isinstance(transform, dict):
                 if transform['type'] == 'Compose':
@@ -43,18 +59,26 @@ class Alaug(object):
             transforms = transform['transforms']
             choices = []
             for t in transforms:
-                parmas = {
-                    key: value
-                    for key, value in t.items() if key is not 'type'
-                }
+                parmas = {}
+                for key, value in t.items():
+                    if key is not 'type':
+                        if isinstance(value,omegaconf.listconfig.ListConfig):
+                            value = tuple(value)
+                        parmas[key] = value
+
                 choice = getattr(al, t['type'])(**parmas)
                 choices.append(choice)
             return getattr(al, 'OneOf')(transforms=choices, p=transform['p'])
-
-        parmas = {
-            key: value
-            for key, value in transform.items() if key is not 'type'
-        }
+        parmas = {}
+        for key, value in transform.items():
+            if key is not 'type':
+                if isinstance(value,omegaconf.listconfig.ListConfig):
+                    value = tuple(value)
+                parmas[key] = value        
+        # parmas = {
+        #     key: value
+        #     for key, value in transform.items() if key is not 'type'
+        # }
         return getattr(al, transform['type'])(**parmas)
 
     def build(self):
