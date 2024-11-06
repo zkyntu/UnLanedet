@@ -76,3 +76,11 @@ python tools/generate_seg_tusimple.py --root $TUSIMPLEROOT
 ```
 </details>
 
+## Inference/Demo
+Run the [detect.py](../tools/detect.py) to test the model.
+
+```Shell
+cd UnLanedet
+python tools/detect.py path_to_config path_to_checkpoint --img path_to_image --savedir path_to_output
+# python tools/detect.py config/clrnet/resnet34_culane.py output/model_0005555.pth --img ../culane/00000.jpg --savedir output/
+```
