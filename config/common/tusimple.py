@@ -40,5 +40,6 @@ dataloader.evaluator = L(TusimpleEvaluator)(
     ori_img_h=ori_img_h,
     ori_img_w=ori_img_w,
     test_json_file=test_json_file,
-    output_basedir="./"
+    output_basedir="./",
+    metric = "acc"    
 )
