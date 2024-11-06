@@ -13,7 +13,7 @@
 <font size=3> See [installation instructions](doc/install.md).
 
 ## Getting Started
-<font size=3> See [Get Started documentation](scripts/TRAIN.md)
+<font size=3> See [Get Started documentation](scripts/TRAIN.md), including the data preparation, the traing code, the evaluation code, the resume code, and the inference code.
 
 ## Model Zoo and Baselines
 We provide a set of lane detection methods, including segmentation-based and anchor-based. All methods can be found in the config folder.

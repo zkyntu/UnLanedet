@@ -209,8 +209,8 @@ class CollectLane(object):
                         min_dis = d
             return min_dis
 
-        output_h = self.cfg.img_height
-        output_w = self.cfg.img_width
+        output_h = self.cfg.img_h
+        output_w = self.cfg.img_w
         mask_h = int(output_h // self.down_scale)
         mask_w = int(output_w // self.down_scale)
         hm_h = int(output_h // self.hm_down_scale)

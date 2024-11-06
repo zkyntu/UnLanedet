@@ -1,5 +1,5 @@
 ## Installation step
-<font size=4> In this documentation, we describe the installation step by step.
+<font size=4> In this documentation, we introduce the installation step by step.
 
 ### Docker installation (recommendation)
 <font size=4>1. Pull the Pytorch docker image.
@@ -33,10 +33,13 @@ pip install hydra-core --upgrade
 python setup.py build develop
 ```
 
-### Pip Installation
+### Conda Installation
 <font size=3>
 
 ```Shell
+conda create -n unlanedet python=3.9 -y
+conda activate unlanedet
+conda install pytorch==2.3.1 torchvision==0.18.1 torchaudio==2.3.1 pytorch-cuda=12.1 -c pytorch -c nvidia
 cd UnLanedet
 pip install -r requirements.txt
 pip install hydra-core --upgrade

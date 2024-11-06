@@ -56,8 +56,7 @@ def do_train(args, cfg):
 
     cfg.optimizer.params.model = model
     optim = instantiate(cfg.optimizer)
-     
-#    import pdb;pdb.set_trace()
+
     train_loader = instantiate(cfg.dataloader.train)
 
     model = create_ddp_model(model, **cfg.train.ddp)
@@ -71,12 +70,13 @@ def do_train(args, cfg):
         [
             hooks.IterationTimer(),
             hooks.LRScheduler(scheduler=instantiate(cfg.lr_multiplier)),
+            hooks.EvalHook(cfg.train.eval_period, lambda: do_test(cfg, model)),
             (
-                hooks.PeriodicCheckpointer(checkpointer, **cfg.train.checkpointer)
+                hooks.BestCheckpointer(checkpointer=checkpointer,eval_period=cfg.train.eval_period,val_metric=cfg.dataloader.evaluator.metric)
+                # hooks.PeriodicCheckpointer(checkpointer, **cfg.train.checkpointer)
                 if comm.is_main_process()
                 else None
             ),
-            hooks.EvalHook(cfg.train.eval_period, lambda: do_test(cfg, model)),
             (
                 hooks.PeriodicWriter(
                     default_writers(cfg.train.output_dir, cfg.train.max_iter),
