@@ -143,7 +143,7 @@ val_process = [
     L(ToTensor)(keys=['img'])
 ]
 
-ddataloader = get_config("config/common/tusimple.py").dataloader
+dataloader = get_config("config/common/tusimple.py").dataloader
 dataloader.train.dataset.processes = train_process
 dataloader.train.dataset.data_root = data_root
 dataloader.train.dataset.cut_height = cut_height
