@@ -15,7 +15,7 @@ from fvcore.common.param_scheduler import CosineParamScheduler
 
 from ..modelzoo import get_config
 
-iou_loss_weight = 2.
+iou_loss_weight = 4.
 cls_loss_weight = 2.
 xyt_loss_weight = 0.2
 seg_loss_weight = 1.0
