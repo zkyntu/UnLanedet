@@ -149,10 +149,12 @@ val_process = [
 dataloader = get_config("config/common/culane.py").dataloader
 dataloader.train.dataset.processes = train_process
 dataloader.train.dataset.data_root = data_root
+dataloader.train.dataset.cut_height = cut_height
 dataloader.train.dataset.cfg = param_config
 dataloader.train.total_batch_size = batch_size
 dataloader.test.dataset.processes = val_process
 dataloader.test.dataset.data_root = data_root
+dataloader.test.dataset.cut_height = cut_height
 dataloader.test.dataset.cfg = param_config
 dataloader.test.total_batch_size = batch_size
 
