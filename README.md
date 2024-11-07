@@ -7,7 +7,8 @@
 <br>
 
 ## What's New
-* <font size=3> We release the v1 version, focusing on 2D lane detection methods.
+* <font size=3> [2024-11-07] We release CondLaneNet and CLRerNet and fix bugs in UnLanedet. Try it!
+* <font size=3> [2024-11-05] We release the v1 version, focusing on 2D lane detection methods.
 
 ## Installation
 <font size=3> See [installation instructions](doc/install.md).
