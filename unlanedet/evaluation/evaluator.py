@@ -76,7 +76,8 @@ class TusimpleEvaluator(DatasetEvaluator):
                  ori_img_h,
                  ori_img_w,
                  test_json_file,
-                 output_basedir=""):
+                 output_basedir="",
+                 metric = None):
         self.ori_img_h = ori_img_h
         self.h_samples = list(range(160, 720, 10))
         self.ori_img_w = ori_img_w
@@ -131,7 +132,8 @@ class CULaneEvaluator(DatasetEvaluator):
                  ori_img_h,
                  ori_img_w,
                  output_basedir="",
-                 cfg=None):
+                 cfg=None,
+                 metric = None):
         self.logger = logging.getLogger(__name__)
         self.data_root = data_root
         self.ori_img_w = ori_img_w

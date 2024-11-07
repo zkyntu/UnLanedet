@@ -1022,7 +1022,7 @@ class CondLaneHead(nn.Module):
             result = adjust_result(
                     lanes=lanes,
                     crop_bbox=self.cfg.crop_bbox,
-                    img_shape=(self.cfg.img_height, self.cfg.img_width),
+                    img_shape=(self.cfg.img_h, self.cfg.img_w),
                     tgt_shape=(self.cfg.ori_img_h, self.cfg.ori_img_w),
                     )
             lanes = []
