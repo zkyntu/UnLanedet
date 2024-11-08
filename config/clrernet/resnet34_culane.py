@@ -36,7 +36,7 @@ ignore_label = 255
 bg_weight = 0.4
 featuremap_out_channel = 192
 num_classes = 4 + 1
-data_root = "/home/dataset/culane"
+data_root = "/root/autodl-tmp/culane"
 
 param_config = OmegaConf.create()
 param_config.iou_loss_weight = iou_loss_weight

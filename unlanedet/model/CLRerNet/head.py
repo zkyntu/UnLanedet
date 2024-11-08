@@ -23,9 +23,7 @@ class CLRerHead(CLRHead):
                          refine_layers, 
                          sample_points, 
                          cfg)
-        self.iou_loss = LaneIoULoss(loss_weight=self.cfg.iou_loss_weight,
-                                    img_h=cfg.img_h,
-                                    img_w=cfg.img_w)
+        self.iou_loss = LaneIoULoss(loss_weight=self.cfg.iou_loss_weight,)
     
     def loss(self, 
              output, 
@@ -104,10 +102,9 @@ class CLRerHead(CLRHead):
                     reduction='none').mean()
 
                 iou_loss = iou_loss + self.iou_loss(
-                    reg_pred, reg_targets)
+                    reg_pred / self.img_w, reg_targets / self.img_w)
 
         # extra segmentation loss
-#        import pdb;pdb.set_trace()
         seg_loss = self.criterion(F.log_softmax(output['seg'], dim=1),batch['seg'].long())
 
         cls_loss /= (len(targets) * self.refine_layers)
