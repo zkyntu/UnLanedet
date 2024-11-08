@@ -97,8 +97,6 @@ class CLRerHead(CLRHead):
 
                 target_yxtl[:, 0] *= self.n_strips
                 target_yxtl[:, 2] *= 180
-#                import pdb;pdb.set_trace()
-#                print(reg_xytl_loss)
                 reg_xytl_loss = reg_xytl_loss + F.smooth_l1_loss(
                     reg_yxtl, target_yxtl,
                     reduction='none').mean()
@@ -107,7 +105,6 @@ class CLRerHead(CLRHead):
                     reg_pred / self.img_w, reg_targets / self.img_w)
 
         # extra segmentation loss
-#        import pdb;pdb.set_trace()
         seg_loss = self.criterion(F.log_softmax(output['seg'], dim=1),batch['seg'].long())
 
         cls_loss /= (len(targets) * self.refine_layers)
