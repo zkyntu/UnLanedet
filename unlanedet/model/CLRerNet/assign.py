@@ -2,16 +2,34 @@ from ..CLRNet.dynamic_assign import focal_cost,dynamic_k_assign,distance_cost
 from .lane_iou import LaneIoUCost
 import torch
 
-lane_iou_cost = LaneIoUCost(use_pred_start_end=False,use_giou=True)
+# For CUlane. Other datasets change the img_w and img_h
+lane_iou_dynamic = LaneIoUCost(use_pred_start_end=False,use_giou=True)
 
-def assign(
-    predictions,
-    targets,
-    img_w,
-    img_h,
-    distance_cost_weight=3.,
-    cls_cost_weight=1.,
-):
+lane_iou_cost = LaneIoUCost(lane_width=30 / 800,use_pred_start_end=True,use_giou=True)
+
+def clrernet_cost(predictions,targets,pred_xs, target_xs, reg_weight = 3):
+    start = end = None
+    length = predictions[:,5].detach().clone()
+    y0 = predictions[:,2].detach().clone()
+    start = y0.clamp(min=0, max=1)
+    end = (start + length).clamp(min=0, max=1)    
+    iou_cost = lane_iou_cost(
+        pred_xs,
+        target_xs,
+        start,
+        end,
+    )
+    iou_score = 1 - (1 - iou_cost) / torch.max(1 - iou_cost) + 1e-2
+    cls_score = focal_cost(predictions[:, :2], targets[:, 1].long())
+
+    cost = -iou_score * reg_weight + cls_score
+    return cost
+
+def assign(    
+        predictions,
+        targets,
+        img_w,
+        img_h,):
     '''
     computes dynamicly matching based on the cost, including cls cost and lane similarity cost
     Args:
@@ -21,40 +39,13 @@ def assign(
         matched_row_inds (Tensor): matched predictions, shape: (num_targets)
         matched_col_inds (Tensor): matched targets, shape: (num_targets)
     '''
-    predictions = predictions.detach().clone()
-    predictions[:, 3] *= (img_w - 1)
-    predictions[:, 6:] *= (img_w - 1)
-    targets = targets.detach().clone()
+    pred_xs = predictions[:,6:]
+    target_xs = targets[:, 6:] / (img_w - 1)  # abs -> relative
 
-    # distances cost
-    distances_score = distance_cost(predictions, targets, img_w)
-    distances_score = 1 - (distances_score / torch.max(distances_score)
-                           ) + 1e-2  # normalize the distance
+    iou_dynamick = lane_iou_dynamic(pred_xs, target_xs)
 
-    # classification cost
-    cls_score = focal_cost(predictions[:, :2], targets[:, 1].long())
-    num_priors = predictions.shape[0]
-    num_targets = targets.shape[0]
+    cost = clrernet_cost(predictions,targets,pred_xs,target_xs)
 
-    target_start_xys = targets[:, 2:4]  # num_targets, 2
-    target_start_xys[..., 0] *= (img_h - 1)
-    prediction_start_xys = predictions[:, 2:4]
-    prediction_start_xys[..., 0] *= (img_h - 1)
-
-    start_xys_score = torch.cdist(prediction_start_xys, target_start_xys,
-                                  p=2).reshape(num_priors, num_targets)
-    start_xys_score = (1 - start_xys_score / torch.max(start_xys_score)) + 1e-2
-
-    target_thetas = targets[:, 4].unsqueeze(-1)
-    theta_score = torch.cdist(predictions[:, 4].unsqueeze(-1),
-                              target_thetas,
-                              p=1).reshape(num_priors, num_targets) * 180
-    theta_score = (1 - theta_score / torch.max(theta_score)) + 1e-2
-
-    cost = -(distances_score * start_xys_score * theta_score
-             )**2 * distance_cost_weight + cls_score * cls_cost_weight
-
-    iou = lane_iou_cost(predictions[..., 6:], targets[..., 6:])
-    matched_row_inds, matched_col_inds = dynamic_k_assign(cost, iou)
+    matched_row_inds, matched_col_inds = dynamic_k_assign(cost, iou_dynamick)
 
     return matched_row_inds, matched_col_inds

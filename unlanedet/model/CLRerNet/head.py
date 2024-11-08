@@ -23,9 +23,7 @@ class CLRerHead(CLRHead):
                          refine_layers, 
                          sample_points, 
                          cfg)
-        self.iou_loss = LaneIoULoss(loss_weight=self.cfg.iou_loss_weight,
-                                    img_h=cfg.img_h,
-                                    img_w=cfg.img_w)
+        self.iou_loss = LaneIoULoss(loss_weight=self.cfg.iou_loss_weight,)
     
     def loss(self, 
              output, 
@@ -99,12 +97,14 @@ class CLRerHead(CLRHead):
 
                 target_yxtl[:, 0] *= self.n_strips
                 target_yxtl[:, 2] *= 180
+#                import pdb;pdb.set_trace()
+#                print(reg_xytl_loss)
                 reg_xytl_loss = reg_xytl_loss + F.smooth_l1_loss(
                     reg_yxtl, target_yxtl,
                     reduction='none').mean()
 
                 iou_loss = iou_loss + self.iou_loss(
-                    reg_pred, reg_targets)
+                    reg_pred / self.img_w, reg_targets / self.img_w)
 
         # extra segmentation loss
 #        import pdb;pdb.set_trace()
