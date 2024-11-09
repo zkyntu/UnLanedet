@@ -14,15 +14,22 @@ def get_extensions():
     extensions = []
 
     op_files = glob.glob('./unlanedet/layers/ops/csrc/*.c*')
-    extension = CUDAExtension
-    ext_name = 'unlanedet.layers.ops.nms_impl'
+    op_files_ad = glob.glob('./unlanedet/layers/ops/csrc/adnet/*.c*')
 
-    ext_ops = extension(
-        name=ext_name,
-        sources=op_files,
+    nms_ext_name = 'unlanedet.layers.ops.nms_impl'
+    nms_ext_ops = CUDAExtension(
+        name=nms_ext_name,
+        sources=op_files
     )
+    extensions.append(nms_ext_ops)
 
-    extensions.append(ext_ops)
+    # for adnet
+    nms_ad_ext_name = 'unlanedet.layers.ops.nms_ad_impl'
+    nms_ad_ext_ops = CUDAExtension(
+        name=nms_ad_ext_name,
+        sources=op_files_ad
+    )
+    extensions.append(nms_ad_ext_ops)
 
     return extensions
 
