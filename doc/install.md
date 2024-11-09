@@ -27,8 +27,10 @@ docker exec -it ldet bash
 <font size=3>
 
 ```Shell
+# git clone https://github.com/zkyntu/UnLanedet.git
 cd /home/UnLanedet
 pip install -r requirements.txt
+pip install numpy==1.23.1
 pip install hydra-core --upgrade
 python setup.py build develop
 ```
@@ -37,11 +39,13 @@ python setup.py build develop
 <font size=3>
 
 ```Shell
+# git clone https://github.com/zkyntu/UnLanedet.git
 conda create -n unlanedet python=3.9 -y
 conda activate unlanedet
 conda install pytorch==2.3.1 torchvision==0.18.1 torchaudio==2.3.1 pytorch-cuda=12.1 -c pytorch -c nvidia
 cd UnLanedet
 pip install -r requirements.txt
+pip install numpy==1.23.1
 pip install hydra-core --upgrade
 python setup.py build develop
 ```
