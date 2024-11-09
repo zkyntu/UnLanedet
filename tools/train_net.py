@@ -1,6 +1,6 @@
 import logging
 
-from unlanedet.checkpoint import Checkpointer
+from unlanedet.checkpoint import Checkpointer,BestCheckPointer
 from unlanedet.config import LazyConfig, instantiate
 from unlanedet.engine import (
     AMPTrainer,
@@ -61,7 +61,7 @@ def do_train(args, cfg):
 
     model = create_ddp_model(model, **cfg.train.ddp)
     trainer = (AMPTrainer if cfg.train.amp.enabled else SimpleTrainer)(model, train_loader, optim)
-    checkpointer = Checkpointer(
+    checkpointer = BestCheckPointer(
         model,
         cfg.train.output_dir,
         trainer=trainer,
