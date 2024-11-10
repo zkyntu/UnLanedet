@@ -215,17 +215,17 @@ class SPGHead(nn.Module):
         hm = output['hm'] 
         hm_focalloss = GFocalLoss()
         theta_regloss = RegL1ThetaLoss()
-        hm_loss = 0
-        theta_loss = 0
+        hm_loss = torch.tensor(0.).to(self.anchor_ys.device)
+        theta_loss = torch.tensor(0.).to(self.anchor_ys.device)
         hm = torch.clamp(hm.sigmoid_(), min=1e-4, max=1 - 1e-4)
         targets = batch['lane_line']
         imgs = batch['img']
         proposals_list = output['proposals_list'] 
         focal_loss = FocalLoss(alpha=0.25, gamma=2.)
         l1loss = nn.SmoothL1Loss()
-        cls_loss = 0
-        reg_loss = 0
-        length_loss = 0
+        cls_loss = torch.tensor(0.).to(self.anchor_ys.device)
+        reg_loss = torch.tensor(0.).to(self.anchor_ys.device)
+        length_loss = torch.tensor(0.).to(self.anchor_ys.device)
         valid_imgs = len(targets)
         for proposals, target,hm_p,shape_hm_p,hm_g,shape_hm_g,shape_hm_m in zip(proposals_list, targets,hm,shape_hm,hm_gt,shape_hm_gt,shape_hm_mask):
 
