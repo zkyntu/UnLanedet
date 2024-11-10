@@ -99,9 +99,8 @@ train.max_iter = total_iter
 train.checkpointer.period=epoch_per_iter
 train.eval_period = epoch_per_iter
 
-optimizer = get_config("config/common/optim.py").AdamW
-optimizer.lr =  0.001
-optimizer.weight_decay = 0.01
+optimizer = get_config("config/common/optim.py").Adam
+optimizer.lr =  0.0012
 
 lr_multiplier = L(CosineParamScheduler)(
     start_value = 1,
