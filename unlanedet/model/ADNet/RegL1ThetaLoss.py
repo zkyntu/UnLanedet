@@ -6,7 +6,7 @@ class RegL1ThetaLoss(nn.Module):
         super(RegL1ThetaLoss, self).__init__()
 
     def forward(self, output, target, mask):
-        loss = F.l1_loss(output * mask, target * mask, size_average=False)
+        loss = F.l1_loss(output * mask, target * mask, reduction='sum')
         mask = mask.bool().float()
         loss = loss / (mask.sum() + 1e-4)
         return loss
