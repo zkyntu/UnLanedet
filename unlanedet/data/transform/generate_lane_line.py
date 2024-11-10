@@ -383,6 +383,7 @@ class GenerateLaneLineATT(object):
 
         return sample
     
+    
 class GenerateLanePts(object):
     def __init__(self, transforms=None, cfg=None, training=True):
         self.transforms = transforms
@@ -502,6 +503,9 @@ class GenerateLanePts(object):
         lanes = np.ones(
             (self.max_lanes, 2 + 1 + 1 + 2 + self.n_offsets), dtype=np.float32
         ) * -1e5  # 2 scores, 1 start_y, 1 start_x, 1 theta, 1 length, S+1 coordinates
+        #===========================================================================
+        # lanes = np.ones((self.max_lanes, 2 + 1 + 1 + 1 + self.n_offsets),
+        #                 dtype=np.float32) * -1e5  # 2 scores, 1 start_y, 1 start_x, 1 length, S+1 coordinates
         lanes_endpoints = np.ones((self.max_lanes, 2))
         # lanes are invalid by default
         lanes[:, 0] = 1
@@ -534,11 +538,23 @@ class GenerateLanePts(object):
                 thetas.append(theta)
             theta_far = sum(thetas) / len(thetas)
 
+            # lanes[lane_idx,
+            #       4] = (theta_closest + theta_far) / 2  # averaged angle
+
+            #===========================================================================
+            #  *                     plus theta,x,y,theta is 0~1!!!
+            # TODO remove 180 for 0~1
             lanes[lane_idx, 4] = theta_far * 180
             lanes[lane_idx, 5] = len(xs_inside_image)
             lanes[lane_idx, 6:6 + len(all_xs)] = all_xs
             lanes_endpoints[lane_idx, 0] = (len(all_xs) - 1) / self.n_strips
             lanes_endpoints[lane_idx, 1] = xs_inside_image[-1] 
+            #===========================================================================
+
+            # lanes[lane_idx, 4] = len(xs_inside_image)
+            # lanes[lane_idx, 5:5 + len(all_xs)] = all_xs
+            # lanes_endpoints[lane_idx, 0] = (len(all_xs) - 1) / self.n_strips
+            # lanes_endpoints[lane_idx, 1] = xs_inside_image[-1]
 
         new_anno = {
             'label': lanes,
@@ -563,6 +579,14 @@ class GenerateLanePts(object):
         return all_gt_points
     def __call__(self, sample):
         img_org = sample['img']
+        if self.cfg.cut_height != 0:
+            new_lanes = []
+            for i in sample['lanes']:
+                lanes = []
+                for p in i:
+                    lanes.append((p[0], p[1] - self.cfg.cut_height))
+                new_lanes.append(lanes)
+            sample.update({'lanes': new_lanes})
         line_strings_org = self.lane_to_linestrings(sample['lanes'])
         line_strings_org = LineStringsOnImage(line_strings_org,
                                               shape=img_org.shape)
