@@ -9,7 +9,7 @@ from .Gfocalloss import GFocalLoss
 from .RegL1ThetaLoss import RegL1ThetaLoss
 from .SPGU import SPGU
 from .ALAU import ALAU
-from ..CLRNet import assign
+from .assign import assign
 from ..module.core.lane import Lane
 from ..module.losses import FocalLoss
 from ...layers.ops import nms_ad_impl as nms
