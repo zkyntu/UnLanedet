@@ -30,7 +30,7 @@ from . import nms_impl,nms_ad_impl
 
 
 def nms_ad_impl(boxes, scores, overlap, top_k):
-    return nms_impl.nms_forward(boxes, scores, overlap, top_k)
+    return nms_ad_impl.nms_forward(boxes, scores, overlap, top_k)
 
 def nms(boxes, scores, overlap, top_k):
     return nms_impl.nms_forward(boxes, scores, overlap, top_k)
