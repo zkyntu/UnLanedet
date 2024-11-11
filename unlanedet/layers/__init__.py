@@ -15,3 +15,4 @@ from .wrappers import (
 from .batch_norm import FrozenBatchNorm2d, get_norm, NaiveSyncBatchNorm, CycleBatchNormList
 from .misc import multi_apply
 from .activation import Activation
+from .droppath import DropPath

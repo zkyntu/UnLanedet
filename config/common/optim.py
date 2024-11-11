@@ -26,3 +26,13 @@ AdamW = L(torch.optim.AdamW)(
     betas=(0.9, 0.999),
     weight_decay=0.1,
 )
+
+Adam = L(torch.optim.Adam)(
+    params = L(get_default_optimizer_params)(
+        base_lr="${..lr}",
+        weight_decay_norm=0.0,
+    ),
+    lr=1e-3,
+    betas=(0.9, 0.999),
+    weight_decay=0.
+)

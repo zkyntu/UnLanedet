@@ -21,6 +21,7 @@ dataloader.train = L(build_batch_data_loader)(
     ),
     total_batch_size=16,
     num_workers=4,
+    shuffle=True,
 )
 
 dataloader.test = L(build_batch_data_loader)(
@@ -33,6 +34,7 @@ dataloader.test = L(build_batch_data_loader)(
     total_batch_size=16,
     num_workers=4,
     drop_last=False,
+    shuffle=False,
 )
 
 dataloader.evaluator = L(CULaneEvaluator)(

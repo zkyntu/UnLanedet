@@ -30,6 +30,7 @@ def build_batch_data_loader(
     persistent_workers=False,
     pin_memory=False,
     seed=None,
+    shuffle = True,
     **kwargs,
 ):
     """
@@ -87,5 +88,6 @@ def build_batch_data_loader(
         persistent_workers=persistent_workers,
         pin_memory=pin_memory,
         generator=generator,
+        shuffle=shuffle,
         **kwargs,
     )
