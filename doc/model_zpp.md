@@ -15,22 +15,44 @@ We will upload the corresponding weights to facilitate the reproduction.
 <th valign="bottom">Backbone</th>
 <th valign="bottom">Accuracy</th>
 <th valign="bottom">Config</th>
+<th valign="bottom">Weight</th>
+<th valign="bottom">Log</th>
 <tr><td align="center">SCNN</td>
 <td align="center">ResNet50</td>
 <td align="center">95.33</td>
 <td align="center"><a href="../config/scnn/resnet50_tusimple.py">file</a></td>
+<td align="center">-</td>
+<td align="center">-</td>
 <tr><td align="center">RESA</td>
 <td align="center">ResNet18</td>
 <td align="center">95.62</td>
 <td align="center"><a href="../config/resa/resnet18_tusimple.py">file</a></td>
+<td align="center">-</td>
+<td align="center">-</td>
 <tr><td align="center">UFLD</td>
 <td align="center">ResNet18</td>
 <td align="center">94.78</td>
 <td align="center"><a href="../config/ufld/resnet18_tusimple.py">file</a></td>
+<td align="center">-</td>
+<td align="center">-</td>
 <tr><td align="center">CLRNet</td>
 <td align="center">ResNet34</td>
 <td align="center">96.90</td>
 <td align="center"><a href="../config/clrnet/resnet34_tusimple.py">file</a></td>
+<td align="center">-</td>
+<td align="center">-</td>
+<tr><td align="center">LaneATT</td>
+<td align="center">ResNet34</td>
+<td align="center">95.81</td>
+<td align="center"><a href="../config/laneatt/resnet18_tusimple.py">file</a></td>
+<td align="center">-</td>
+<td align="center">-</td>
+<tr><td align="center">ADNet</td>
+<td align="center">ResNet34</td>
+<td align="center">96.65</td>
+<td align="center"><a href="../config/adnet/resnet34_tusimple.py">file</a></td>
+<td align="center"><a href="https://github.com/zkyntu/UnLanedet/releases/download/Weights/adnet_model_best_tusimple.pth">model.pth</a></td>
+<td align="center"><a href="https://github.com/zkyntu/UnLanedet/releases/download/Weights/adnet_log_tusimple.txt">train.log</a></td>
 </tr>
 </tbody></table>
 
@@ -44,17 +66,39 @@ We will upload the corresponding weights to facilitate the reproduction.
 <th valign="bottom">Backbone</th>
 <th valign="bottom">F1</th>
 <th valign="bottom">Config</th>
+<th valign="bottom">Weight</th>
+<th valign="bottom">Log</th>
 <tr><td align="center">UFLD</td>
 <td align="center">ResNet18</td>
 <td align="center">63.14</td>
 <td align="center"><a href="../config/ufld/resnet18_culane.py">file</a></td>
+<td align="center">-</td>
+<td align="center">-</td>
 <tr><td align="center">CLRNet</td>
 <td align="center">ResNet34</td>
 <td align="center">79.73</td>
 <td align="center"><a href="../config/clrnet/resnet34_culane.py">file</a></td>
+<td align="center">-</td>
+<td align="center">-</td>
 <tr><td align="center">CondLaneNet</td>
 <td align="center">ResNet50</td>
 <td align="center">79.69</td>
 <td align="center"><a href="../config/condlane/resnet50_culane.py">file</a></td>
+<td align="center">-</td>
+<td align="center">-</td>
+<tr><td align="center">CLRerNet</td>
+<td align="center">ResNet34</td>
+<td align="center">-</td>
+<td align="center"><a href="../config/clrernet/resnet34_culane.py">file</a></td>
+<td align="center">-</td>
+<td align="center">-</td>
+<tr><td align="center">ADNet</td>
+<td align="center">ResNet34</td>
+<td align="center">77.88</td>
+<td align="center"><a href="../config/adnet/resnet34_culane.py">file</a></td>
+<td align="center"><a href="https://github.com/zkyntu/UnLanedet/releases/download/Weights/adnet_model_best_culane.pth">model.pth</a></td>
+<td align="center"><a href="https://github.com/zkyntu/UnLanedet/releases/download/Weights/adnet_log_culane.txt">train.log</a></td>
+</tr>
+</tbody></table>
 
-
+**Note**: All models are trained from scratch and reproduction results are different from the official repo. 
