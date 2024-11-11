@@ -12,7 +12,7 @@ from .ALAU import ALAU
 from .assign import assign
 from ..module.core.lane import Lane
 from ..module.losses import FocalLoss
-from ...layers.ops import nms_ad_impl as nms
+from ...layers.ops import nms_ad_ as nms
 from ...layers import Conv2d,get_norm,Activation
 
 class SPGHead(nn.Module):
