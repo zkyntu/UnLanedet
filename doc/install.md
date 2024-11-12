@@ -50,4 +50,4 @@ pip install hydra-core --upgrade
 python setup.py build develop
 ```
 
-**Note** If numpy==1.23.1 is unable to be installed, you should replace np.bool with bool in numpy>=1.23.x manually.
+**Note**: If numpy==1.23.1 is unable to be installed, you should replace np.bool with bool in numpy>=1.23.x manually.
