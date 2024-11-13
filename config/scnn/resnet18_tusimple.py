@@ -24,7 +24,7 @@ img_norm = dict(
     std=[1., 1., 1.]
 )
 ignore_label = 255
-data_root = ""
+data_root = "/data"
 
 param_config = OmegaConf.create()
 param_config.img_height = img_height
@@ -41,7 +41,7 @@ param_config.ignore_label = ignore_label
 
 model = L(SCNN)(
     backbone = L(ResNetWrapper)(
-        resnet='resnet50',
+        resnet='resnet18',
         pretrained=True,
         replace_stride_with_dilation=[False, True, True],
         out_conv=True,  
@@ -56,8 +56,8 @@ model = L(SCNN)(
 )
 
 train = get_config("config/common/train.py").train
-epochs = 40
-batch_size = 4
+epochs = 100
+batch_size = 32
 epoch_per_iter = (3616 // batch_size + 1)
 total_iter = epoch_per_iter * epochs 
 train.max_iter = total_iter
