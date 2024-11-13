@@ -70,7 +70,7 @@ lr_multiplier = L(PolynomialDecayParamScheduler)(
 )
 
 optimizer = get_config("config/common/optim.py").SGD
-optimizer.lr = 0.025
+optimizer.lr = 0.01
 
 train_process = [
     L(RandomRotation)(),
