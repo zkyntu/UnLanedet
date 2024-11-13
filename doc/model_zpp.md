@@ -18,9 +18,9 @@ We will upload the corresponding weights to facilitate the reproduction.
 <th valign="bottom">Weight</th>
 <th valign="bottom">Log</th>
 <tr><td align="center">SCNN</td>
-<td align="center">ResNet50</td>
+<td align="center">ResNet18</td>
 <td align="center">95.33</td>
-<td align="center"><a href="../config/scnn/resnet50_tusimple.py">file</a></td>
+<td align="center"><a href="../config/scnn/resnet18_tusimple.py">file</a></td>
 <td align="center">-</td>
 <td align="center">-</td>
 <tr><td align="center">RESA</td>
