@@ -88,10 +88,10 @@ We will upload the corresponding weights to facilitate the reproduction.
 <td align="center">-</td>
 <tr><td align="center">CLRerNet</td>
 <td align="center">ResNet34</td>
-<td align="center">-</td>
+<td align="center">79.20</td>
 <td align="center"><a href="../config/clrernet/resnet34_culane.py">file</a></td>
-<td align="center">-</td>
-<td align="center">-</td>
+<td align="center"><a href="https://github.com/zkyntu/UnLanedet/releases/download/Weights/clrernet_model_best_culane.pth">model.pth</a></td>
+<td align="center"><a href="https://github.com/zkyntu/UnLanedet/releases/download/Weights/clrernet_log_culane.txt">train.log</a></td>
 <tr><td align="center">ADNet</td>
 <td align="center">ResNet34</td>
 <td align="center">77.88</td>
