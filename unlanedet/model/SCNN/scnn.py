@@ -6,7 +6,7 @@ from ..module.architecture import Detector
 
 class SCNN_AGG(nn.Module):
     def __init__(self, cfg=None):
-        super(SCNN, self).__init__()
+        super().__init__()
         self.conv_d = nn.Conv2d(128, 128, (1, 9), padding=(0, 4), bias=False)
         self.conv_u = nn.Conv2d(128, 128, (1, 9), padding=(0, 4), bias=False)
         self.conv_r = nn.Conv2d(128, 128, (9, 1), padding=(4, 0), bias=False)
