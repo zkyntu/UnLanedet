@@ -78,8 +78,8 @@ We will upload the corresponding weights to facilitate the reproduction.
 <td align="center">ResNet34</td>
 <td align="center">79.73</td>
 <td align="center"><a href="../config/clrnet/resnet34_culane.py">file</a></td>
-<td align="center">-</td>
-<td align="center">-</td>
+<td align="center"><a href="https://github.com/zkyntu/UnLanedet/releases/download/Weights/clrnet_model_best_culane.pth">model.pth</a></td>
+<td align="center"><a href="https://github.com/zkyntu/UnLanedet/releases/download/Weights/clrnet_log_culane.txt">train.log</a></td>
 <tr><td align="center">CondLaneNet</td>
 <td align="center">ResNet50</td>
 <td align="center">79.69</td>
