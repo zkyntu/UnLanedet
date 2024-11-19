@@ -43,10 +43,10 @@ We will upload the corresponding weights to facilitate the reproduction.
 <td align="center">-</td>
 <tr><td align="center">LaneATT</td>
 <td align="center">ResNet34</td>
-<td align="center">95.81</td>
+<td align="center">94.65</td>
 <td align="center"><a href="../config/laneatt/resnet18_tusimple.py">file</a></td>
-<td align="center">-</td>
-<td align="center">-</td>
+<td align="center"><a href="https://github.com/zkyntu/UnLanedet/releases/download/Weights/laneatt_model_best_tusimple.pth">model.pth</a></td>
+<td align="center"><a href="https://github.com/zkyntu/UnLanedet/releases/download/Weights/laneatt_log_tusimple.txt">train.log</a></td>
 <tr><td align="center">ADNet</td>
 <td align="center">ResNet34</td>
 <td align="center">96.65</td>
