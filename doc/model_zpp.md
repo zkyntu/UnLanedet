@@ -31,10 +31,10 @@ We will upload the corresponding weights to facilitate the reproduction.
 <td align="center">-</td>
 <tr><td align="center">UFLD</td>
 <td align="center">ResNet18</td>
-<td align="center">94.78</td>
+<td align="center">95.17</td>
 <td align="center"><a href="../config/ufld/resnet18_tusimple.py">file</a></td>
-<td align="center">-</td>
-<td align="center">-</td>
+<td align="center"><a href="https://github.com/zkyntu/UnLanedet/releases/download/Weights/ufld_model_best_tusimple.pth">model.pth</a></td>
+<td align="center"><a href="https://github.com/zkyntu/UnLanedet/releases/download/Weights/ufld_log_tusimple.txt">train.log</a></td>
 <tr><td align="center">CLRNet</td>
 <td align="center">ResNet34</td>
 <td align="center">96.64</td>
