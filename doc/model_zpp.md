@@ -37,10 +37,10 @@ We will upload the corresponding weights to facilitate the reproduction.
 <td align="center">-</td>
 <tr><td align="center">CLRNet</td>
 <td align="center">ResNet34</td>
-<td align="center">96.90</td>
+<td align="center">96.64</td>
 <td align="center"><a href="../config/clrnet/resnet34_tusimple.py">file</a></td>
-<td align="center">-</td>
-<td align="center">-</td>
+<td align="center"><a href="https://github.com/zkyntu/UnLanedet/releases/download/Weights/clrnet_model_best_tusimple.pth">model.pth</a></td>
+<td align="center"><a href="https://github.com/zkyntu/UnLanedet/releases/download/Weights/clrnet_log_tusimple.txt">train.log</a></td>
 <tr><td align="center">LaneATT</td>
 <td align="center">ResNet34</td>
 <td align="center">94.65</td>
