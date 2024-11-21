@@ -25,10 +25,10 @@ We will upload the corresponding weights to facilitate the reproduction.
 <td align="center">-</td>
 <tr><td align="center">RESA</td>
 <td align="center">ResNet18</td>
-<td align="center">95.62</td>
+<td align="center">96.27</td>
 <td align="center"><a href="../config/resa/resnet18_tusimple.py">file</a></td>
-<td align="center">-</td>
-<td align="center">-</td>
+<td align="center"><a href="https://github.com/zkyntu/UnLanedet/releases/download/Weights/resa_model_best_tusimple.pth">model.pth</a></td>
+<td align="center"><a href="https://github.com/zkyntu/UnLanedet/releases/download/Weights/resa_log_tusimple.txt">train.log</a></td>
 <tr><td align="center">UFLD</td>
 <td align="center">ResNet18</td>
 <td align="center">95.17</td>
