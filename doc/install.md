@@ -1,5 +1,7 @@
 ## Installation step
-<font size=4> In this documentation, we introduce the installation step by step.
+<font size=4> In this documentation, we introduce the installation step by step. 
+
+**Important: UnLanedet only supports the Linux!**
 
 ### Docker installation (recommendation)
 <font size=4>1. Pull the Pytorch docker image.
