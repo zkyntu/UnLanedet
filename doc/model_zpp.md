@@ -19,10 +19,10 @@ We will upload the corresponding weights to facilitate the reproduction.
 <th valign="bottom">Log</th>
 <tr><td align="center">SCNN</td>
 <td align="center">ResNet18</td>
-<td align="center">95.33</td>
+<td align="center">96.02</td>
 <td align="center"><a href="../config/scnn/resnet18_tusimple.py">file</a></td>
-<td align="center">-</td>
-<td align="center">-</td>
+<td align="center"><a href="https://github.com/zkyntu/UnLanedet/releases/download/Weights/scnn_model_best_tusimple.pth">model.pth</a></td>
+<td align="center"><a href="https://github.com/zkyntu/UnLanedet/releases/download/Weights/scnn_log_tusimple.txt">train.log</a></td>
 <tr><td align="center">RESA</td>
 <td align="center">ResNet18</td>
 <td align="center">96.27</td>
