@@ -71,8 +71,8 @@ $TUSIMPLEROOT/test_label.json # test label json file
 Tusimple does not provide segmentation label. You can run the following code to gengerate the segmentation mask. 
 
 ```Shell
-python tools/generate_seg_tusimple.py --root $TUSIMPLEROOT
-# python tools/generate_seg_tusimple.py --root /root/paddlejob/workspace/train_data/datasets --savedir /root/paddlejob/workspace/train_data/datasets/seg_label
+python tools/generate_seg.py --root $TUSIMPLEROOT
+# python tools/generate_seg.py --root /root/paddlejob/workspace/train_data/datasets --savedir /root/paddlejob/workspace/train_data/datasets/seg_label
 ```
 </details>
 
