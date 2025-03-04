@@ -7,6 +7,7 @@
 <br>
 
 ## What's New
+* <font size=3> [2025-03-04] We release the [Timm library wrapper](unlanedet/model/module/backbone/timm_wrapper.py)! Users can directly transfer the advanced backbone to UnLanedet. In the following weeks, we will release the v2 version.
 * <font size=3> [2024-11-10] We release ADNet and LaneATT. Try it!
 * <font size=3> [2024-11-07] We release CondLaneNet and CLRerNet and fix bugs in UnLanedet. Try it!
 * <font size=3> [2024-11-05] We release the v1 version, focusing on 2D lane detection methods.

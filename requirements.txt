@@ -9,4 +9,4 @@ albucore
 scikit-image
 p_tqdm
 tensorboard
-# numpy==1.23.1
+timm
