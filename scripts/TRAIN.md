@@ -93,3 +93,4 @@ cd UnLanedet
 python tools/test_speed.py path_to_config path_to_checkpoint 
 # python tools/test_speed.py config/clrnet/resnet34_culane.py output/model_0005555.pth
 ```
+The result is tested under the python environment. If you want to get high speed, please refer to the TensorRT inference, which we do not support now.
