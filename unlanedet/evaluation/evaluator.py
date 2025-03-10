@@ -13,6 +13,8 @@ from torch import nn
 
 from . import culane_metric
 from .tusimple_metric import LaneEval
+from .vil_metric import eval_predictions,LaneEval as VILLaneEval
+from .vil_utils import RES_MAPPING
 from ..utils.comm import get_world_size, is_main_process
 from ..utils.logger import log_every_n_seconds
 
