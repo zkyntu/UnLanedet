@@ -41,6 +41,8 @@ dataloader.test = L(build_batch_data_loader)(
 )
 
 dataloader.evaluator = L(VILEvaluator)(
+    output_basedir="",
     data_root = "",
+    split='test',
     metric = "F1"    
 )
