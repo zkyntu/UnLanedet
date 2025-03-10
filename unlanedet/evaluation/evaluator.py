@@ -217,8 +217,9 @@ class CULaneEvaluator(DatasetEvaluator):
         return result
 
 class VILEvaluator(DatasetEvaluator):
-    def __init__(self,data_root,split):
+    def __init__(self,output_basedir,data_root,split,metric=None):
         super().__init__()
+        self.output_basedir = output_basedir
         dbfile = os.path.join(data_root, 'data', 'db_info.yaml')
         self.imgdir = os.path.join(data_root, 'JPEGImages')
         self.annodir = os.path.join(data_root, 'Annotations')
@@ -331,9 +332,9 @@ class VILEvaluator(DatasetEvaluator):
             lanes.append(lane.tolist())
 
         return lanes
-    def evaluate(self, predictions, output_basedir):
+    def evaluate(self, predictions):
         print('Generating prediction output...')
-        output_basedir = os.path.join(output_basedir,'preds')
+        output_basedir = os.path.join(self.output_basedir,'preds')
         os.makedirs(output_basedir, exist_ok=True)
         for idx, pred in enumerate(tqdm(predictions)):
             sub_name = self.data_infos[idx]['img_name'].split('/')[1]
