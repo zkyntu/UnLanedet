@@ -178,4 +178,5 @@ dataloader.test.dataset.cut_height = cut_height
 dataloader.test.total_batch_size = batch_size
 
 # Evaluation config
-dataloader.evaluator.data_root = "./output_vil"
+dataloader.evaluator.output_basedir = "./output_vil"
+dataloader.evaluator.data_root = data_root
