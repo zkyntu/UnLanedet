@@ -101,4 +101,24 @@ We will upload the corresponding weights to facilitate the reproduction.
 </tr>
 </tbody></table>
 
+### VIL100 baselines
+
+<table><tbody>
+<!-- START TABLE -->
+<!-- TABLE HEADER -->
+<th valign="bottom">Model</th>
+<th valign="bottom">Backbone</th>
+<th valign="bottom">F1</th>
+<th valign="bottom">Config</th>
+<th valign="bottom">Weight</th>
+<th valign="bottom">Log</th>
+<tr><td align="center">ADNet</td>
+<td align="center">ResNet34</td>
+<td align="center">89.43</td>
+<td align="center"><a href="../config/adnet/resnet34_vil.py">file</a></td>
+<td align="center">-</td>
+<td align="center">-</td>
+</tr>
+</tbody></table>
+
 **Note**: All models are trained from scratch and reproduction results are different from the official repo. 
