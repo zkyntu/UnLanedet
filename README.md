@@ -17,7 +17,7 @@
 <font size=3> See [installation instructions](doc/install.md).
 
 ## Getting Started
-<font size=3> See [Get Started documentation](scripts/TRAIN.md), including the data preparation, the traing code, the evaluation code, the resume code, and the inference code.
+<font size=3> See [Get Started documentation](scripts/TRAIN.md), including the data preparation, the training code, the evaluation code, the resume code, the inference code, and the advanced usage.
 
 ## Model Zoo and Baselines
 We provide a set of lane detection methods, including segmentation-based and anchor-based. All models and the corresponding weights and the training logs can be found in the [Model Zoo](doc/model_zpp.md).
