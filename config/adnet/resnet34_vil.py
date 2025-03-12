@@ -4,7 +4,7 @@ import os
 from omegaconf import OmegaConf
 from unlanedet.config import LazyCall as L
 
-from unlanedet.model.ADNet import SA_FPN,SPGHead
+from unlanedet.model.ADNet import SA_FPN,SPGHead,ADNet
 from unlanedet.model import ResNetWrapper,Detector
 
 from unlanedet.data.transform import *
@@ -68,7 +68,7 @@ param_config.ori_img_h = ori_img_h
 param_config.cut_height = cut_height
 param_config.hm_down_scale = hm_down_scale
 
-model = L(Detector)(
+model = L(ADNet)(
     backbone = L(ResNetWrapper)(
         resnet='resnet34',
         pretrained=True,
@@ -86,6 +86,7 @@ model = L(Detector)(
         img_width = img_w,
         img_height = img_h,
         start_points_num=anchors_num,
+        vil=True,
         cfg = param_config       
     )
 )
