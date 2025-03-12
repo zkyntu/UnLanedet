@@ -116,7 +116,7 @@ We will upload the corresponding weights to facilitate the reproduction.
 <td align="center">ResNet34</td>
 <td align="center">89.43</td>
 <td align="center"><a href="../config/adnet/resnet34_vil.py">file</a></td>
-<td align="center">-</td>
+<td align="center"><a href="https://github.com/zkyntu/UnLanedet/releases/download/Weights/adnet_model_final_vil100.pth">model.pth</a></td>
 <td align="center">-</td>
 </tr>
 </tbody></table>
