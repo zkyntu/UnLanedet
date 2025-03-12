@@ -25,7 +25,7 @@ bash scripts/resume_train.sh path_to_config num_gpus
 ```
 
 ## Data Preparation
-Currently, UnLanedet achieves Tusimple and CULane dataset. In the future, we will support more lane detection datasets.
+Currently, UnLanedet achieves Tusimple, CULane dataset, and VIL100 dataset.
 
 ### CULane
 <details>
