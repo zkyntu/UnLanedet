@@ -22,6 +22,7 @@ class SPGHead(nn.Module):
                  img_height=360,
                  anchor_feat_channels=64,
                  start_points_num=100,
+                 vil = False,
                  cfg=None):
         super(SPGHead, self).__init__()
         self.cfg = cfg
@@ -55,6 +56,7 @@ class SPGHead(nn.Module):
         self.anchor_ys = self.anchor_ys.cuda()
         # * debug
         self.hack = False
+        self.vil = vil
 
     @staticmethod
     def initialize_layer(layer):
@@ -156,7 +158,13 @@ class SPGHead(nn.Module):
         reg_proposals[:, :, 5:] += reg
         
         # Apply nms
-        proposals_list = self.nms(reg_proposals, nms_thres, nms_topk, conf_threshold)  
+        proposals_list = self.nms(reg_proposals, nms_thres, nms_topk, conf_threshold) 
+        if self.vil and not self.training:
+            from ...evaluation.vil_utils import RES_MAPPING
+            sub_name = kwargs['batch']['meta']._data[0][0]['img_name'].split('/')[1]
+            self.cfg.ori_img_h,self.cfg.ori_img_w = RES_MAPPING[sub_name]
+            self.cfg.cut_height = self.cfg.ori_img_h // 3            
+        # import pdb;pdb.set_trace()
 
         output =dict(
                 hm = hm,
@@ -201,6 +209,10 @@ class SPGHead(nn.Module):
             if keep is not None:
                 proposals = proposals[keep]
                 start_points_hm = start_points_hm[keep]
+                if self.vil and not self.training:
+                    from ...evaluation.vil_utils import relocate2mid
+                    proposals_np = relocate2mid(proposals.cpu().numpy(),start_points_hm.cpu().numpy()*np.array([self.cfg.img_w,self.cfg.img_h]),cfg=self.cfg)
+                    proposals = torch.tensor(proposals_np).to(scores.device)                    
                 proposals_list.append(proposals)
             else:
                 proposals_list.append(proposals)

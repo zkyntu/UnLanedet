@@ -579,6 +579,8 @@ class GenerateLanePts(object):
         return all_gt_points
     def __call__(self, sample):
         img_org = sample['img']
+        if 'cut_height' in sample.keys():
+            self.cfg.cut_height = sample['cut_height']
         if self.cfg.cut_height != 0:
             new_lanes = []
             for i in sample['lanes']:

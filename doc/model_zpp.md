@@ -4,8 +4,6 @@
 
 This file documents a collection of baselines trained with UnLanedet. All models are trained on the [AutoDL platform](https://www.autodl.com/) with a single 3090 GPU (or a 4090D GPU) with 24 GB memtory. We suggest that users train the model on this platform with the provided docker image.
 
-We will upload the corresponding weights to facilitate the reproduction.
-
 ### Tusimple baselines
 
 <table><tbody>
@@ -101,4 +99,24 @@ We will upload the corresponding weights to facilitate the reproduction.
 </tr>
 </tbody></table>
 
-**Note**: All models are trained from scratch and reproduction results are different from the official repo. 
+### VIL100 baselines
+
+<table><tbody>
+<!-- START TABLE -->
+<!-- TABLE HEADER -->
+<th valign="bottom">Model</th>
+<th valign="bottom">Backbone</th>
+<th valign="bottom">F1</th>
+<th valign="bottom">Config</th>
+<th valign="bottom">Weight</th>
+<th valign="bottom">Log</th>
+<tr><td align="center">ADNet</td>
+<td align="center">ResNet34</td>
+<td align="center">89.43</td>
+<td align="center"><a href="../config/adnet/resnet34_vil.py">file</a></td>
+<td align="center"><a href="https://github.com/zkyntu/UnLanedet/releases/download/Weights/adnet_model_final_vil100.pth">model.pth</a></td>
+<td align="center">-</td>
+</tr>
+</tbody></table>
+
+**Note**: All models are trained from scratch. 
