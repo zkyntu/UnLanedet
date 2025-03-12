@@ -76,6 +76,30 @@ python tools/generate_seg.py --root $TUSIMPLEROOT
 ```
 </details>
 
+### VIL-100
+<details>
+<summary>VIL100 Preparation</summary>
+  
+Download [VIL-100](https://github.com/yujun0-0/mma-net). Unzip the data to `$VIL100ROOT`. Mkdir `data` folder
+
+```Shell
+cd $LANEDET_ROOT
+mkdir -p data
+ln -s $VIL100ROOT data/VIL100
+```
+
+For VIL100, the data structure should be
+```Shell
+/VIL100ROOT/VIL100/
+├── Annotations
+├── anno_txt
+├── data
+├── JPEGImages
+└── Json
+```
+You may find anno_txt here [anno_txt.zip](https://drive.google.com/file/d/1SizP9p0n-x-GhHmpYNyhMPBpPQgS3enI/view?usp=drive_link)
+</details>
+
 ## Inference/Demo
 Run the [detect.py](../tools/detect.py) to test the model.
 
