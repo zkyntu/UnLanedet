@@ -4,8 +4,6 @@
 
 This file documents a collection of baselines trained with UnLanedet. All models are trained on the [AutoDL platform](https://www.autodl.com/) with a single 3090 GPU (or a 4090D GPU) with 24 GB memtory. We suggest that users train the model on this platform with the provided docker image.
 
-We will upload the corresponding weights to facilitate the reproduction.
-
 ### Tusimple baselines
 
 <table><tbody>
@@ -121,4 +119,4 @@ We will upload the corresponding weights to facilitate the reproduction.
 </tr>
 </tbody></table>
 
-**Note**: All models are trained from scratch and reproduction results are different from the official repo. 
+**Note**: All models are trained from scratch. 
