@@ -4,6 +4,9 @@ import yaml
 from .base_dataset import BaseDataset
 from tqdm import tqdm
 import numpy as np
+import cv2
+import os.path as osp
+from .transform import DataContainer as DC
 
 class VIL100(BaseDataset):
     def __init__(self, data_root, split, cut_height, processes=None, cfg=None):
@@ -75,3 +78,35 @@ class VIL100(BaseDataset):
         
         if len(points) > self.max_lane:
             self.max_lane = len(points)
+
+    def __getitem__(self, idx):
+        data_info = self.data_infos[idx]
+        if not osp.isfile(data_info['img_path']):
+            raise FileNotFoundError('cannot find file: {}'.format(data_info['img_path']))
+
+        img = cv2.imread(data_info['img_path'])
+
+        cut_height = img.shape[0] // 3
+
+        img = img[cut_height:, :, :]
+        sample = data_info.copy()
+        sample.update({'img': img})
+
+        if self.training:
+            label = cv2.imread(sample['mask_path'], cv2.IMREAD_UNCHANGED)
+            if len(label.shape) > 2:
+                label = label[:, :, 0]
+            label = label.squeeze()
+            label = label[cut_height:, :]
+            sample.update({'mask': label})
+
+        sample.update({'cut_height':cut_height})
+        sample = self.processes(sample)
+        meta = {'full_img_path': data_info['img_path'],
+                'img_name': data_info['img_name'],
+                'cut_height':cut_height}
+        meta = DC(meta, cpu_only=True)
+        sample.update({'meta': meta})
+
+
+        return sample 
