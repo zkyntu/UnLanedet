@@ -1,5 +1,5 @@
 # UnLanedet
-<font size=4> An Unified 2D and 3D lane detection toolbox. UnLanedet contains many advanced lane detection methods to facilitate scientific research and lane detection applications. If you are in china, [gitee](https://gitee.com/zkyseured/UnLanedet) link may be helpful for you.
+<font size=4> An advanced lane detection toolbox. UnLanedet contains many advanced lane detection methods to facilitate scientific research and lane detection applications. If you are in china, [gitee](https://gitee.com/zkyseured/UnLanedet) link may be helpful for you.
 
 <div align="center">
   <img src="doc/Lane_Detection_Demo.jpg"/>
