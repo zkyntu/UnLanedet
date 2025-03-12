@@ -1,6 +1,6 @@
 from omegaconf import OmegaConf
 from unlanedet.config import LazyCall as L
-from unlanedet.data.build import build_batch_data_loader
+from unlanedet.data.build import build_batch_data_loader,build_batchvil_test_data_loader
 from unlanedet.data.vil import VIL100
 from unlanedet.evaluation.evaluator import VILEvaluator
 
@@ -27,7 +27,7 @@ dataloader.train = L(build_batch_data_loader)(
     shuffle=True,
 )
 
-dataloader.test = L(build_batch_data_loader)(
+dataloader.test = L(build_batchvil_test_data_loader)(
     dataset = L(VIL100)(
         data_root = "./vil",
         split='test',
