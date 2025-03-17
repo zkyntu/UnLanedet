@@ -93,7 +93,8 @@ class VIL100(BaseDataset):
         sample.update({'img': img})
 
         if self.training:
-            label = cv2.imread(sample['mask_path'], cv2.IMREAD_UNCHANGED)
+            label = Image.open(sample['mask_path'])
+            label = np.array(label)
             if len(label.shape) > 2:
                 label = label[:, :, 0]
             label = label.squeeze()
