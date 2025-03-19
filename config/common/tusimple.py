@@ -35,7 +35,7 @@ dataloader.test = L(build_batch_data_loader)(
     total_batch_size=16,
     num_workers=4,
     drop_last=False,
-    shuffle=True,
+    shuffle=False,
 )
 
 dataloader.evaluator = L(TusimpleEvaluator)(
