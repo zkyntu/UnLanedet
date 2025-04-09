@@ -119,4 +119,4 @@ This file documents a collection of baselines trained with UnLanedet. All models
 </tr>
 </tbody></table>
 
-**Note**: All models are trained from scratch. 
+**Note**: 1) All models are trained from scratch. 2) Check the log file using the following codes: ```cat xxx.log``` (linux) or ```type xxx.log``` (windows)
