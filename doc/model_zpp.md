@@ -76,6 +76,12 @@ This file documents a collection of baselines trained with UnLanedet. All models
 <td align="center">ResNet34</td>
 <td align="center">78.99</td>
 <td align="center"><a href="../config/clrnet/resnet34_culane.py">file</a></td>
+<td align="center"><a href="https://github.com/zkyntu/UnLanedet/releases/download/Weights/clrnet_r50_culane_model_best.pth">model.pth</a></td>
+<td align="center"><a href="https://github.com/zkyntu/UnLanedet/releases/download/Weights/clrnet_r50_culane_log.txt">train.log</a></td>
+<tr><td align="center">CLRNet</td>
+<td align="center">ResNet50</td>
+<td align="center">79.30</td>
+<td align="center"><a href="../config/clrnet/resnet50_culane.py">file</a></td>
 <td align="center"><a href="https://github.com/zkyntu/UnLanedet/releases/download/Weights/clrnet_model_best_culane.pth">model.pth</a></td>
 <td align="center"><a href="https://github.com/zkyntu/UnLanedet/releases/download/Weights/clrnet_log_culane.txt">train.log</a></td>
 <tr><td align="center">CondLaneNet</td>
