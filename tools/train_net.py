@@ -1,4 +1,5 @@
 import logging
+import copy
 
 from unlanedet.checkpoint import Checkpointer,BestCheckPointer
 from unlanedet.config import LazyConfig, instantiate
@@ -54,8 +55,9 @@ def do_train(args, cfg):
     logger.info("Model:\n{}".format(model))
     model.to(cfg.train.device)
 
-    cfg.optimizer.params.model = model
-    optim = instantiate(cfg.optimizer)
+    cfg_copy = copy.deepcopy(cfg)
+    cfg_copy.optimizer.params.model = model
+    optim = instantiate(cfg_copy.optimizer)
 
     train_loader = instantiate(cfg.dataloader.train)
 
