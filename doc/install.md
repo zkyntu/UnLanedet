@@ -37,6 +37,9 @@ pip install hydra-core --upgrade
 python setup.py build develop
 ```
 
+<font size=4>4. (Optional) If you want to use the distributed training, please fix bugs in imgaug library following [issues](https://github.com/yu4u/age-estimation-pytorch/issues/21#issuecomment-1244821328).
+
+
 ### Conda Installation
 <font size=3>
 
