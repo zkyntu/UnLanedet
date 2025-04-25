@@ -456,6 +456,8 @@ def inference_on_dataset(
             outputs = model(inputs)
             if hasattr(model,"get_lanes"):
                 outputs = model.get_lanes(outputs)
+            if num_devices > 1 and hasattr(model.module,"get_lanes"):
+                outputs = model.module.get_lanes(outputs)
             dict.get(callbacks or {}, "after_inference", lambda: None)()
             if torch.cuda.is_available():
                 torch.cuda.synchronize()
