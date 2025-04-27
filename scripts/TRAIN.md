@@ -309,6 +309,7 @@ Note: UnLanedet is built on lazy configuration. Therefore, UnLanedet does not re
 </details>
 
 ## Components
+The following table shows the components of UnLanedet.
 
 <table align="center">
   <tbody>
