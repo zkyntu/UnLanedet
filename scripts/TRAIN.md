@@ -308,3 +308,86 @@ dataloader.evaluator.test_json_file=os.path.join(data_root,"test_label.json")
 Note: UnLanedet is built on lazy configuration. Therefore, UnLanedet does not require the registry for the model, just importing your model in the config file.
 </details>
 
+## Components
+
+<table align="center">
+  <tbody>
+    <tr align="center" valign="bottom">
+      <td colspan="2">
+        <b>Components</b>
+      </td>
+    </tr>
+    <tr valign="top">
+      <td>
+        <details><summary><b>Backbones</b></summary>
+          <ul>
+            <li><a href="../unlanedet/model/module/backbone/resnet.py">ResNet</a></li>
+            <li><a href="../unlanedet/model/module/backbone/timm_wrapper.py">TiMMBackbone</a></li>
+          </ul>
+        </details>
+        <details><summary><b>Necks</b></summary>
+          <ul>
+            <li><a href="../unlanedet/model/module/neck/fpn.py">FPN</a></li>
+            <li><a href="../unlanedet/model/module/neck/csprepbifpn.py">CSPRepbifpn</a></li>
+            <li><a href="../unlanedet/model/ADNet/SA_FPN.py">CSPRepbifpn</a></li>
+          </ul>
+        </details>
+        <details><summary><b>Losses</b></summary>
+          <ul>
+            <li><a href="../unlanedet/model/module/losses/focal_loss.py">Focal Loss</a></li>
+            <li><a href="../unlanedet/model/module/losses/focal_loss.py">MultiClassFocal Loss</a></li>
+            <li><a href="../unlanedet/model/CondlaneNet/head.py#L71-L81">RegL1KpLoss</a></li>
+            <li><a href="../unlanedet/model/CLRNet/line_iou.py">Line_iou loss</a></li>
+            <li><a href="../unlanedet/model/CLRerNet/lane_iou.py">Lane_iou loss</a></li>
+            <li><a href="../unlanedet/model/ADNet/Glineiou_loss.py">Generlized Line_iou loss</a></li>
+            <li><a href="../unlanedet/model/ADNet/RegL1ThetaLoss.py">RegL1ThetaLoss</a></li>
+          </ul>
+        </details>
+        <details><summary><b>Convolution</b></summary>
+          <ul>
+            <li><a href="../unlanedet/layers/blocks.py">DepthwiseSeparableConv2d</a></li>
+            <li><a href="../unlanedet/model/module/neck/csprepbifpn.py#L155C7-L155C14">RepConv</a></li>
+            <li><a href="../unlanedet/layers/batch_norm.py">Normalization Function (BN,GN,etc.)</a></li>
+            <li><a href="../unlanedet/layers/droppath.py">DropPath</a></li>
+            <li><a href="../unlanedet/model/module/neck/csprepbifpn.py">ConvBNSiLU</a></li>
+          </ul>
+        </details>
+        <details><summary><b>Metrics</b></summary>
+          <ul>
+            <li>Accuracy</li>
+            <li>FP</li>
+            <li>FN</li>
+          </ul>  
+        </details>
+      </td>
+      <td>
+        <details><summary><b>Datasets</b></summary>
+          <ul>
+            <li><a href="https://github.com/zkyseu/PPlanedet/blob/v2/pplanedet/datasets/tusimple.py">Tusimple</a></li>  
+            <li><a href="https://github.com/zkyseu/PPlanedet/blob/v2/pplanedet/datasets/culane.py">CULane</a></li>
+          </ul>
+        </details>
+        <details><summary><b>Data Augmentation</b></summary>
+          <ul>
+            <li>RandomLROffsetLABEL</li>  
+            <li>Resize</li>  
+            <li>RandomUDoffsetLABEL</li>
+            <li>RandomCrop</li>
+            <li>CenterCrop</li>  
+            <li>RandomRotation</li>  
+            <li>RandomBlur</li>
+            <li>Normalize</li>
+            <li>RandomHorizontalFlip</li>
+            <li>Colorjitters</li>
+            <li>RandomErasings</li>
+            <li>GaussianBlur</li>
+            <li>RandomGrayScale</li>
+            <li>Alaug</li> 
+          </ul>
+        </details>
+      </td>
+    </tr>
+</td>
+    </tr>
+  </tbody>
+</table>
