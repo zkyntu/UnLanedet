@@ -81,11 +81,7 @@ def collect_env_info():
         data.append(("unlanedet", "failed to import"))
     except AttributeError:
         data.append(("unlanedet", "imported a wrong installation"))
-
-    try:
-        import detectron2._C as _C
-    except ImportError as e:
-        data.append(("detectron2._C", f"not built correctly: {e}"))
+        
 
         # print system compilers when extension fails to build
         if sys.platform != "win32":  # don't know what to do for windows
