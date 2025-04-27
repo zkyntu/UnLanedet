@@ -350,6 +350,7 @@ Note: UnLanedet is built on lazy configuration. Therefore, UnLanedet does not re
             <li><a href="../unlanedet/layers/batch_norm.py">Normalization Function (BN,GN,etc.)</a></li>
             <li><a href="../unlanedet/layers/droppath.py">DropPath</a></li>
             <li><a href="../unlanedet/model/module/neck/csprepbifpn.py">ConvBNSiLU</a></li>
+            <li><a href="../unlanedet/layers/ops">NMS</a></li>
           </ul>
         </details>
         <details><summary><b>Metrics</b></summary>
@@ -357,14 +358,16 @@ Note: UnLanedet is built on lazy configuration. Therefore, UnLanedet does not re
             <li>Accuracy</li>
             <li>FP</li>
             <li>FN</li>
+            <li>F1 score</li>
           </ul>  
         </details>
       </td>
       <td>
         <details><summary><b>Datasets</b></summary>
           <ul>
-            <li><a href="https://github.com/zkyseu/PPlanedet/blob/v2/pplanedet/datasets/tusimple.py">Tusimple</a></li>  
-            <li><a href="https://github.com/zkyseu/PPlanedet/blob/v2/pplanedet/datasets/culane.py">CULane</a></li>
+            <li><a href="../unlanedet/data/tusimple.py">Tusimple</a></li>  
+            <li><a href="../unlanedet/data/culane.py">CULane</a></li>
+            <li><a href="../unlanedet/data/vil.py">VIL100</a></li>
           </ul>
         </details>
         <details><summary><b>Data Augmentation</b></summary>
