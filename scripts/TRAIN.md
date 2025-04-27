@@ -329,7 +329,7 @@ Note: UnLanedet is built on lazy configuration. Therefore, UnLanedet does not re
           <ul>
             <li><a href="../unlanedet/model/module/neck/fpn.py">FPN</a></li>
             <li><a href="../unlanedet/model/module/neck/csprepbifpn.py">CSPRepbifpn</a></li>
-            <li><a href="../unlanedet/model/ADNet/SA_FPN.py">CSPRepbifpn</a></li>
+            <li><a href="../unlanedet/model/ADNet/SA_FPN.py">SAFPN</a></li>
           </ul>
         </details>
         <details><summary><b>Losses</b></summary>
