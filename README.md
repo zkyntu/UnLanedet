@@ -37,7 +37,7 @@ If you use UnLanedet in your research, please use the following BibTeX entry.
 
 ```BibTeX
 @misc{zhouunlanedet,
-  author =       {Kunyang Zhou},
+  author =       {UnLanedet team},
   title =        {UnLanedet},
   howpublished = {\url{https://github.com/zkyntu/UnLanedet}},
   year =         {2024}
