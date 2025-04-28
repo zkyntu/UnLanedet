@@ -429,6 +429,7 @@ def inference_on_dataset(
     dataset = data_loader.dataset
     evaluator.data_infos = dataset.data_infos
     evaluator.reset()
+    is_view = evaluator.view if hasattr(evaluator,"view") else False
 
     num_warmup = min(5, total - 1)
     start_time = time.perf_counter()
@@ -465,6 +466,8 @@ def inference_on_dataset(
 
             start_eval_time = time.perf_counter()
             prediction.extend(outputs)
+            if is_view:
+                dataset.view(outputs,inputs['meta'],"viz")
             # evaluator.process(inputs, outputs)
             total_eval_time += time.perf_counter() - start_eval_time
 
