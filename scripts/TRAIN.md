@@ -130,7 +130,7 @@ We introduce how to add the new model to UnLanedet. We take CLRNet as an example
 
 2. Add the core model under CLRNet folder.
 
-3. create the config file. Following the example config file below.
+3. Create the config file and follow the example config file below.
 
 ```Shell
 from ..modelzoo import get_config
