@@ -109,7 +109,7 @@ python tools/detect.py path_to_config path_to_checkpoint --img path_to_image --s
 # python tools/detect.py config/clrnet/resnet34_culane.py output/model_0005555.pth --img ../culane/00000.jpg --savedir output/
 ```
 
-If you want to visual the results of the evaluation dataset, please add ```view=True``` in your config. The visualization results are saved in the ```viz``` folder.
+If you want to visual the results of the evaluation dataset, please 1) add ```view=True``` in your config; 2) run the evaluation code. The visualization results are saved in the ```UnLanedet/viz``` folder.
 
 ## Inference speed 
 Run the [test_speed.py](../tools/test_speed.py) to test the inference speed of the model.
