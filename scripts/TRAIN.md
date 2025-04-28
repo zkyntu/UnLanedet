@@ -109,6 +109,8 @@ python tools/detect.py path_to_config path_to_checkpoint --img path_to_image --s
 # python tools/detect.py config/clrnet/resnet34_culane.py output/model_0005555.pth --img ../culane/00000.jpg --savedir output/
 ```
 
+If you want to visual the results of the evaluation dataset, please add ```view=True``` in your config.
+
 ## Inference speed 
 Run the [test_speed.py](../tools/test_speed.py) to test the inference speed of the model.
 
