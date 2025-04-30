@@ -109,6 +109,8 @@ python tools/detect.py path_to_config path_to_checkpoint --img path_to_image --s
 # python tools/detect.py config/clrnet/resnet34_culane.py output/model_0005555.pth --img ../culane/00000.jpg --savedir output/
 ```
 
+If you want to visual the results of the evaluation dataset, please 1) add ```view=True``` in your config; 2) run the evaluation code. The visualization results are saved in the ```UnLanedet/viz``` folder.
+
 ## Inference speed 
 Run the [test_speed.py](../tools/test_speed.py) to test the inference speed of the model.
 
@@ -128,7 +130,7 @@ We introduce how to add the new model to UnLanedet. We take CLRNet as an example
 
 2. Add the core model under CLRNet folder.
 
-3. create the config file. Following the example config file below.
+3. Create the config file and follow the example config file below.
 
 ```Shell
 from ..modelzoo import get_config
@@ -308,3 +310,90 @@ dataloader.evaluator.test_json_file=os.path.join(data_root,"test_label.json")
 Note: UnLanedet is built on lazy configuration. Therefore, UnLanedet does not require the registry for the model, just importing your model in the config file.
 </details>
 
+## Components
+The following table shows the components of UnLanedet.
+
+<table align="center">
+  <tbody>
+    <tr align="center" valign="bottom">
+      <td colspan="2">
+        <b>Components</b>
+      </td>
+    </tr>
+    <tr valign="top">
+      <td>
+        <details><summary><b>Backbones</b></summary>
+          <ul>
+            <li><a href="../unlanedet/model/module/backbone/resnet.py">ResNet</a></li>
+            <li><a href="../unlanedet/model/module/backbone/timm_wrapper.py">TiMMBackbone</a></li>
+          </ul>
+        </details>
+        <details><summary><b>Necks</b></summary>
+          <ul>
+            <li><a href="../unlanedet/model/module/neck/fpn.py">FPN</a></li>
+            <li><a href="../unlanedet/model/module/neck/csprepbifpn.py">CSPRepbifpn</a></li>
+            <li><a href="../unlanedet/model/ADNet/SA_FPN.py">SAFPN</a></li>
+          </ul>
+        </details>
+        <details><summary><b>Losses</b></summary>
+          <ul>
+            <li><a href="../unlanedet/model/module/losses/focal_loss.py">Focal Loss</a></li>
+            <li><a href="../unlanedet/model/module/losses/focal_loss.py">MultiClassFocal Loss</a></li>
+            <li><a href="../unlanedet/model/CondlaneNet/head.py#L71-L81">RegL1KpLoss</a></li>
+            <li><a href="../unlanedet/model/CLRNet/line_iou.py">Line_iou loss</a></li>
+            <li><a href="../unlanedet/model/CLRerNet/lane_iou.py">Lane_iou loss</a></li>
+            <li><a href="../unlanedet/model/ADNet/Glineiou_loss.py">Generlized Line_iou loss</a></li>
+            <li><a href="../unlanedet/model/ADNet/RegL1ThetaLoss.py">RegL1ThetaLoss</a></li>
+          </ul>
+        </details>
+        <details><summary><b>Convolution</b></summary>
+          <ul>
+            <li><a href="../unlanedet/layers/blocks.py">DepthwiseSeparableConv2d</a></li>
+            <li><a href="../unlanedet/model/module/neck/csprepbifpn.py#L155C7-L155C14">RepConv</a></li>
+            <li><a href="../unlanedet/layers/batch_norm.py">Normalization Function (BN,GN,etc.)</a></li>
+            <li><a href="../unlanedet/layers/droppath.py">DropPath</a></li>
+            <li><a href="../unlanedet/model/module/neck/csprepbifpn.py">ConvBNSiLU</a></li>
+            <li><a href="../unlanedet/layers/ops">NMS</a></li>
+          </ul>
+        </details>
+        <details><summary><b>Metrics</b></summary>
+          <ul>
+            <li>Accuracy</li>
+            <li>FP</li>
+            <li>FN</li>
+            <li>F1 score</li>
+          </ul>  
+        </details>
+      </td>
+      <td>
+        <details><summary><b>Datasets</b></summary>
+          <ul>
+            <li><a href="../unlanedet/data/tusimple.py">Tusimple</a></li>  
+            <li><a href="../unlanedet/data/culane.py">CULane</a></li>
+            <li><a href="../unlanedet/data/vil.py">VIL100</a></li>
+          </ul>
+        </details>
+        <details><summary><b>Data Augmentation</b></summary>
+          <ul>
+            <li>RandomLROffsetLABEL</li>  
+            <li>Resize</li>  
+            <li>RandomUDoffsetLABEL</li>
+            <li>RandomCrop</li>
+            <li>CenterCrop</li>  
+            <li>RandomRotation</li>  
+            <li>RandomBlur</li>
+            <li>Normalize</li>
+            <li>RandomHorizontalFlip</li>
+            <li>Colorjitters</li>
+            <li>RandomErasings</li>
+            <li>GaussianBlur</li>
+            <li>RandomGrayScale</li>
+            <li>Alaug</li> 
+          </ul>
+        </details>
+      </td>
+    </tr>
+</td>
+    </tr>
+  </tbody>
+</table>
