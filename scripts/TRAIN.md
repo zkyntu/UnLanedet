@@ -1,5 +1,8 @@
 ## Engine code
 
+### Matters for the Linux platform.
+When you first use Unlanedet, please run the following code: 1) ```sudo apt update && sudo apt install dos2unix```. 2) ```dos2unix scripts/train.sh scripts/eval.sh scripts/resume_train.sh``` to convert DOS files to Linux files.
+
 ### Training
 ```Shell
 cd UnLanedet
@@ -308,6 +311,14 @@ dataloader.evaluator.test_json_file=os.path.join(data_root,"test_label.json")
 4. Run the training code.
 
 Note: UnLanedet is built on lazy configuration. Therefore, UnLanedet does not require the registry for the model, just importing your model in the config file.
+</details>
+
+<details>
+<summary>Training on the custom dataset</summary>
+
+1. An easy way to train your own dataset is conveting the dataset format to Tusimple or CULane dataset.
+
+2. If you are having difficulty in converting the dataset format, you can refer to the following instructions: 1) Create the Dataset class following [Tusimple](../unlanedet/data/tusimple.py), [CULane](../unlanedet/data/tusimple.py), or [BaseDataset](../unlanedet/data/base_dataset.py). 2) Create the evaluator following [TusimpleEvaluator](../unlanedet/evaluation/evaluator.py#L73-L126). The most important step is implementing the ```evaluate``` function. 3) Importing the dataset and evaluator in the config file.
 </details>
 
 ## Components
