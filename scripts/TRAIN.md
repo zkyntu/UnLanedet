@@ -1,5 +1,8 @@
 ## Engine code
 
+### Matters for the Linux platform.
+When you first use Unlanedet, please run the following code: 1) ```sudo apt update && sudo apt install dos2unix```. 2) ```dos2unix scripts/train.sh scripts/eval.sh scripts/resume_train.sh``` to convert DOS files to Linux files.
+
 ### Training
 ```Shell
 cd UnLanedet
