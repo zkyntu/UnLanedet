@@ -59,6 +59,14 @@ This file documents a collection of baselines trained with UnLanedet. All models
 <td align="center"><a href="https://github.com/zkyntu/UnLanedet/releases/download/Weights/adnet_model_best_tusimple.pth">model.pth</a></td>
 <td align="center"><a href="https://github.com/zkyntu/UnLanedet/releases/download/Weights/adnet_log_tusimple.txt">train.log</a></td>
 </tr>
+<tr><td align="center">SRLane</td>
+<td align="center">AAAI</td>
+<td align="center">ResNet34</td>
+<td align="center">96.21</td>
+<td align="center"><a href="../config/srnet/resnet34_tusimple.py">file</a></td>
+<td align="center"><a href="https://github.com/zkyntu/UnLanedet/releases/download/Weights/srnet_r34_tusimple_model_best.pth">model.pth</a></td>
+<td align="center"><a href="https://github.com/zkyntu/UnLanedet/releases/download/Weights/srnet_r34_tusimple_log.txt">train.log</a></td>
+</tr>
 </tbody></table>
 
 
