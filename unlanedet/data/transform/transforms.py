@@ -32,6 +32,27 @@ def to_tensor(data):
         return torch.FloatTensor([data])
     else:
         raise TypeError(f'type {type(data)} cannot be converted to tensor.')
+
+class ListToTensor(object):
+    def __init__(self, keys=['img', 'mask'], collect_keys=[], cfg=None):
+        self.keys = keys
+        self.collect_keys = collect_keys
+
+    def __call__(self, sample):
+        data = {}
+        if len(sample['img'].shape) < 3:
+            sample['img'] = np.expand_dims(sample['img'], -1)
+        for key in sample.keys():
+            if isinstance(sample[key], list) or isinstance(sample[key], dict):
+                data[key] = sample[key]
+                continue
+            if key in self.keys:
+                data[key] = to_tensor(sample[key])
+            if key in self.collect_keys:
+                data[key] = sample[key]
+        data['img'] = data['img'].permute(2, 0, 1)
+        return data
+
     
 class ToTensor(object):
     """Convert some results to :obj:`torch.Tensor` by given keys.

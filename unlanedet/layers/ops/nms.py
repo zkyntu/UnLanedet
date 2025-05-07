@@ -26,11 +26,14 @@
 # OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE
 # OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
-from . import nms_impl,nms_ad_impl
+from . import nms_impl,nms_ad_impl,nms_sr_impl
 
+def nms_srnet(boxes, scores, overlap, top_k):
+    return nms_sr_impl.nms_forward(boxes, scores, overlap, top_k)
 
 def nms_ad_(boxes, scores, overlap, top_k):
     return nms_ad_impl.nms_forward(boxes, scores, overlap, top_k)
 
 def nms(boxes, scores, overlap, top_k):
     return nms_impl.nms_forward(boxes, scores, overlap, top_k)
+
