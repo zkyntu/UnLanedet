@@ -56,11 +56,11 @@ setuptools.setup(
     install_requires=REQUIRED_PACKAGES,
     classifiers=[
         "Programming Language :: Python :: 3",
-        "License :: OSI Approved :: MIT License",
+        "License :: OSI Approved :: Apache 2.0 license",
         "Operating System :: OS Independent",
     ],
     tests_require=['pytest'],
     ext_modules=get_extensions(),
     cmdclass={'build_ext': BuildExtension},
-    license='MIT License',
+    license='Apache 2.0 license',
     entry_points={'console_scripts': ['unlanedet=unlanedet.command:main', ]})
