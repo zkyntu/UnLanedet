@@ -108,6 +108,7 @@ train.max_iter = total_iter
 train.checkpointer.period=epoch_per_iter
 train.eval_period = epoch_per_iter * 5
 
+
 optimizer = get_config("config/common/optim.py").Adam
 optimizer.lr = 1e-3
 optimizer.params.lr_factor_func = lambda module_name: 0.1 if "conv_offset" in module_name else 1
@@ -126,7 +127,7 @@ lr_multiplier = L(WarmupParamScheduler)(
 
 train_process = [
     L(RandomHorizontalFlip)(),
-    L(RandomAffine)(affine_ratio=0.7, degrees=10, translate=0.1, scale=0.2, shear=0.0),
+    L(RandomAffine)(affine_ratio=0.7, degrees=10, translate=0.1, scale=0.2, shear=0.0,keys=['lanes','control_points']),
     L(Resize)(size=(img_w, img_h)),
     L(Normalize)(img_norm=img_norm),
     L(GenerateBezierInfo)(order=order, num_sample_points=100,cfg=param_config),

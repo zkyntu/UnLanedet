@@ -334,7 +334,7 @@ class Preprocess(object):
         return data
 
 class RandomAffine:
-    def __init__(self, affine_ratio, degrees=10, translate=.1, scale=.1, shear=10, perspective=0.0, border=(0, 0)):
+    def __init__(self, affine_ratio, degrees=10, translate=.1, scale=.1, shear=10, perspective=0.0, border=(0, 0),keys=[]):
         assert 0 <= affine_ratio <= 1
         self.affine_ratio = affine_ratio
         self.degrees = degrees
@@ -343,20 +343,20 @@ class RandomAffine:
         self.shear = shear
         self.perspective = perspective
         self.border = border
+        self.key_list = keys
 
     def _transform_data(self, results, M, width, height):
         # transform img
-        for key in results.get('img_fields', ['img']):
-            img = results[key].copy()
-            if (self.border[0] != 0) or (self.border[1] != 0) or (M != np.eye(3)).any():  # image changed
-                if self.perspective:
-                    im = cv2.warpPerspective(img, M, dsize=(width, height), borderValue=(0, 0, 0))
-                else:  # affine
-                    im = cv2.warpAffine(img, M[:2], dsize=(width, height), borderValue=(0, 0, 0))
-            results[key] = im
+        img = results["img"].copy()
+        if (self.border[0] != 0) or (self.border[1] != 0) or (M != np.eye(3)).any():  # image changed
+            if self.perspective:
+                im = cv2.warpPerspective(img, M, dsize=(width, height), borderValue=(0, 0, 0))
+            else:  # affine
+                im = cv2.warpAffine(img, M[:2], dsize=(width, height), borderValue=(0, 0, 0))
+        results["img"] = im
 
         # transform lane
-        for key in results.get('lane_fields', []):
+        for key in self.key_list:
             lanes = results[key].copy()
             new_lanes = []
             for lane in lanes:
