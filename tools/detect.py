@@ -64,8 +64,8 @@ def show(model,data,cfg):
     if isinstance(data['lanes'][0],Lane):
         lanes = [lane.to_array(cfg.param_config) for lane in data['lanes']]
     else:
-        lanes = [np.array(lane, dtype=np.float32) for lane in lanes]
-    lanes = [lane.to_array(cfg.param_config) for lane in data['lanes']]
+        lanes = [np.array(lane, dtype=np.float32) for lane in data['lanes']]
+    # lanes = [lane.to_array(cfg.param_config) for lane in data['lanes']]
     imshow_lanes(data['ori_img'], lanes, show=False, out_file=out_file)
 
 def run(data,cfg,model):
