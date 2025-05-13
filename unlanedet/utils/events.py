@@ -5,7 +5,7 @@ import os
 import time
 from collections import defaultdict
 from contextlib import contextmanager
-# from functools import cached_property
+# from functools import cached_property # for python>=3.8
 from functools import lru_cache
 from typing import Optional
 import torch

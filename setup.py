@@ -5,7 +5,7 @@ from torch.utils.cpp_extension import CUDAExtension, BuildExtension
 
 import unlanedet
 
-long_description = "A Tookit for lane detection based on PaddlePaddle"
+long_description = "A Tookit for lane detection based on PyTorch"
 
 with open("requirements.txt") as file:
     REQUIRED_PACKAGES = file.read()
@@ -49,18 +49,18 @@ setuptools.setup(
     description=long_description,
     long_description=long_description,
     long_description_content_type="text/plain",
-    url="https://github.com/zkyseu/PPlanedet",
+    url="https://github.com/zkyntu/UnLanedet",
     packages=setuptools.find_packages(),
     include_package_data=True,
     setup_requires=['cython', 'numpy', 'pytest-runner'],
     install_requires=REQUIRED_PACKAGES,
     classifiers=[
         "Programming Language :: Python :: 3",
-        "License :: OSI Approved :: MIT License",
+        "License :: OSI Approved :: Apache 2.0 license",
         "Operating System :: OS Independent",
     ],
     tests_require=['pytest'],
     ext_modules=get_extensions(),
     cmdclass={'build_ext': BuildExtension},
-    license='MIT License',
-    entry_points={'console_scripts': ['pplanedet=pplanedet.command:main', ]})
+    license='Apache 2.0 license',
+    entry_points={'console_scripts': ['unlanedet=unlanedet.command:main', ]})
