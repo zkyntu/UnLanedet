@@ -17,7 +17,7 @@ from .vil_metric import eval_predictions,LaneEval as VILLaneEval
 from .vil_utils import RES_MAPPING
 from ..utils.comm import get_world_size, is_main_process
 from ..utils.logger import log_every_n_seconds
-
+from ..model.module.core.lane import Lane
 
 class DatasetEvaluator:
     """
@@ -88,15 +88,34 @@ class TusimpleEvaluator(DatasetEvaluator):
         self.output_basedir = output_basedir
 
     def pred2lanes(self, pred):
-        ys = np.array(self.h_samples) / self.ori_img_h
-        lanes = []
-        for lane in pred:
-            xs = lane(ys)
-            invalid_mask = xs < 0
-            lane = (xs * self.ori_img_w).astype(int)
-            lane[invalid_mask] = -2
-            lanes.append(lane.tolist())
-        return lanes    
+        # old version. If you meet errors, you can switch to the old version
+        # ys = np.array(self.h_samples) / self.ori_img_h
+        # lanes = []
+        # for lane in pred:
+        #     xs = lane(ys)
+        #     invalid_mask = xs < 0
+        #     lane = (xs * self.ori_img_w).astype(int)
+        #     lane[invalid_mask] = -2
+        #     lanes.append(lane.tolist())
+        # return lanes    
+
+        if len(pred) and isinstance(pred[0], Lane):    #  List[Lane0, Lane1, ...]
+            ys = np.array(self.h_samples) / self.ori_img_h
+            lanes = []
+            for lane in pred:
+                xs = lane(ys)
+                invalid_mask = xs < 0
+                lane = (xs * self.ori_img_w).astype(int)
+                lane[invalid_mask] = -2
+                lanes.append(lane.tolist())
+        else:       # List[(N0, 2),  (N1, 2), ...]
+            # for BezierNet
+            lanes = []
+            for lane in pred:
+                lane = lane.astype(np.int)
+                lanes.append(lane[:, 0].tolist())
+        
+        return lanes 
     
     def pred2tusimpleformat(self, idx, pred, runtime):
         runtime *= 1000.  # s to ms

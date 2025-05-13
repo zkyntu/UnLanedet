@@ -16,3 +16,4 @@ from .batch_norm import FrozenBatchNorm2d, get_norm, NaiveSyncBatchNorm, CycleBa
 from .misc import multi_apply
 from .activation import Activation
 from .droppath import DropPath
+from .blocks import DilatedBottleneck,DilatedBlocks,DepthwiseSeparableConv2d
