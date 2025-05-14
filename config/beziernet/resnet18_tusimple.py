@@ -20,7 +20,7 @@ from fvcore.common.param_scheduler import CosineParamScheduler
 
 order = 3
 img_w = 640
-img_h = 320
+img_h = 360
 ori_img_w = 1280
 ori_img_h = 720
 cut_height = 160
@@ -60,7 +60,7 @@ model = L(BezierLaneNet)(
         in_channels=256,
         branch_channels=256,
         num_proj_layers=2,
-        feature_size=(20, 40),
+        feature_size=(23, 40),
         order=order,
         with_seg=False,
         num_classes=1,
@@ -108,10 +108,10 @@ train.max_iter = total_iter
 train.checkpointer.period=epoch_per_iter
 train.eval_period = epoch_per_iter * 5
 
-
 optimizer = get_config("config/common/optim.py").Adam
 optimizer.lr = 1e-3
 optimizer.params.lr_factor_func = lambda module_name: 0.1 if "conv_offset" in module_name else 1
+
 
 core_lr_multiplier = L(CosineParamScheduler)(
     start_value = 1,
@@ -127,7 +127,7 @@ lr_multiplier = L(WarmupParamScheduler)(
 
 train_process = [
     L(RandomHorizontalFlip)(),
-    L(RandomAffine)(affine_ratio=0.7, degrees=10, translate=0.1, scale=0.2, shear=0.0,keys=['lanes','control_points']),
+    L(RandomAffine)(affine_ratio=0.7, degrees=10, translate=0.1, scale=0.2, shear=0.0,keys=['control_points'],norm_shape=(ori_img_h-cut_height,ori_img_w)),
     L(Resize)(size=(img_w, img_h)),
     L(Normalize)(img_norm=img_norm),
     L(GenerateBezierInfo)(order=order, num_sample_points=100,cfg=param_config),
@@ -143,26 +143,20 @@ val_process = [
 
 dataloader = get_config("config/common/tusimple.py").dataloader
 dataloader.train.dataset = L(BiazerTusimple)(
-                                data_root = "./tusimple",
+                                data_root = data_root,
                                 split='trainval',
                                 cut_height=cut_height,
-                                processes=None,
+                                processes=train_process,
                                 cfg=param_config
                             )
-dataloader.train.dataset.processes = train_process
-dataloader.train.dataset.data_root = data_root
-dataloader.train.dataset.cut_height = cut_height
 dataloader.train.total_batch_size = batch_size
 dataloader.test.dataset = L(BiazerTusimple)(
-                                data_root = "./tusimple",
+                                data_root = data_root,
                                 split='test',
                                 cut_height=cut_height,
-                                processes=None,
+                                processes=val_process,
                                 cfg=param_config
                             )
-dataloader.test.dataset.processes = val_process
-dataloader.test.dataset.data_root = data_root
-dataloader.test.dataset.cut_height = cut_height
 dataloader.test.total_batch_size = batch_size
 
 dataloader.evaluator.output_basedir = "./output"

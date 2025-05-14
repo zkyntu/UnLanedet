@@ -83,7 +83,7 @@ class BiazerTusimple(TuSimple):
                 lanes = [lane for lane in lanes if len(lane) > 0]
                 lanes_labels = [0 for lane in lanes]    # 只有一个类别
                 max_lanes = max(max_lanes, len(lanes))
-                lane_exist = data['lane_exist']
+#                lane_exist = data['lane_exist']
                 mask_path = data['raw_file'].replace('clips', 'seg_label')[:-3] + 'png'
                 data_infos.append({
                     'img_path': osp.join(self.data_root, data['raw_file']),
@@ -91,7 +91,7 @@ class BiazerTusimple(TuSimple):
                     'mask_path': osp.join(self.data_root, mask_path),
                     'lanes': lanes,
                     'lanes_labels': np.array(lanes_labels, dtype=np.long),
-                    'lane_exist': np.array(lane_exist, dtype=np.long)
+#                    'lane_exist': np.array(lane_exist, dtype=np.long)
                 })
         self.data_infos = data_infos
         
@@ -124,21 +124,13 @@ class BiazerTusimple(TuSimple):
             label = label[self.cut_height:, :]
             sample.update({'mask': label})
 
-        new_lanes = []
-        for lane in sample['lanes']:
-            new_lane = []
-            for p in lane:
-                new_lane.append((p[0], p[1]-self.cut_height))
-            new_lanes.append(new_lane)
-        sample['lanes'] = new_lanes
-
-        new_lanes2 = []
-        for lane in sample['control_points']:
-            new_lane = []
-            for p in lane:
-                new_lane.append((p[0], p[1]-self.cut_height))
-            new_lanes2.append(new_lane)
-        sample['control_points'] = new_lanes2
+            new_lanes2 = []
+            for lane in sample['control_points']:
+                new_lane = []
+                for p in lane:
+                    new_lane.append((p[0], p[1]-self.cut_height))
+                new_lanes2.append(new_lane)
+            sample['control_points'] = new_lanes2
 
 
         sample = self.processes(sample)
@@ -146,8 +138,5 @@ class BiazerTusimple(TuSimple):
                 'img_name': data_info['img_name']}
         meta = DC(meta, cpu_only=True)
         sample.update({'meta': meta})
-
-        return sample 
-
 
         return sample 

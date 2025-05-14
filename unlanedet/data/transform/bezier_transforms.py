@@ -51,12 +51,13 @@ class Lanes2ControlPoints:
         return results
 
 class GenerateBezierInfo:
-    def __init__(self, order=3, num_sample_points=100, norm=True,cfg = None):
+    def __init__(self, order=3, num_sample_points=100, norm=True,cfg = None,norm_shape=None):
         self.order = order
         self.bezier_curve = BezierCurve(order=order)
         self.num_sample_points = num_sample_points
         self.norm = norm
         self.cfg = cfg
+        self.norm_shape = norm_shape
 
     def normalize_points(self, points, img_shape):
         """
@@ -169,10 +170,8 @@ class GenerateBezierInfo:
         return res, keep_indices
 
     def _transform_annotation(self, results):
-#        img_shape = results['img_shape']    # (h, w, 3)
-#        h, w = img_shape[:2]
-        h, w = self.cfg.img_shape
-        gt_labels = results['lanes']
+        h, w = self.norm_shape
+        gt_labels = results['lanes_labels']
         control_points = np.array(results['control_points'], dtype=np.float32)   # (N_lanes, N_control_points, 2)
         if len(control_points) > 0:
             if self.norm:
@@ -187,11 +186,9 @@ class GenerateBezierInfo:
             else:
                 control_points, keep_indices = self.cubic_bezier_curve_segmentv2(control_points, sample_points)
                 gt_labels = gt_labels[keep_indices]
-        results['gt_control_points'] = control_points
-        results['lanes'] = gt_labels
 
-#        results['gt_control_points'] = DC(to_tensor(control_points), stack=False)  # (1, hm_h=img_h/16, hm_w=img_w/16)
-#        results['lanes'] = DC(to_tensor(gt_labels), stack=False)
+        results['gt_control_points'] = DC(to_tensor(control_points),stack=False)  # (1, hm_h=img_h/16, hm_w=img_w/16)
+        results['lanes_labels'] = DC(to_tensor(gt_labels), stack=False)
 
     def __call__(self, results):
         self._transform_annotation(results)
