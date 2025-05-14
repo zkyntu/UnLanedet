@@ -67,6 +67,15 @@ This file documents a collection of baselines trained with UnLanedet. All models
 <td align="center"><a href="https://github.com/zkyntu/UnLanedet/releases/download/Weights/srnet_r34_tusimple_model_best.pth">model.pth</a></td>
 <td align="center"><a href="https://github.com/zkyntu/UnLanedet/releases/download/Weights/srnet_r34_tusimple_log.txt">train.log</a></td>
 </tr>
+</tr>
+<tr><td align="center">BezierNet</td>
+<td align="center">CVPR</td>
+<td align="center">ResNet18</td>
+<td align="center">-</td>
+<td align="center"><a href="../config/beziernet/resnet18_tusimple.py">file</a></td>
+<td align="center">-</a></td>
+<td align="center">-</a></td>
+</tr>
 </tbody></table>
 
 
@@ -149,4 +158,4 @@ This file documents a collection of baselines trained with UnLanedet. All models
 </tr>
 </tbody></table>
 
-**Note**: 1) All models are trained from scratch. 2) Check the log file using the following codes: ```cat xxx.log``` (linux) or ```type xxx.log``` (windows)
+**Note**: 1) All models are trained from scratch. 2) Check the log file using the following codes: ```cat xxx.log``` (linux) or ```type xxx.log``` (windows). 3) The performance of the model is not fully aligned with the original paper due to the time limit.
