@@ -33,6 +33,8 @@ UnLanedet is released under the Apache 2.0 license.
 ## Acknowledgement
 UnLanedet is built upon [detectron2](https://github.com/facebookresearch/detectron2), [lanedet](https://github.com/Turoad/lanedet) and [PPLanedet](https://github.com/zkyseu/PPlanedet). Many thanks to their great work!
 
+The code of BeizerNet is modified from [mmLaneDet](https://github.com/Yzichen/mmLaneDet). Many thanks to authors.
+
 ## Citing UnLanedet
 If you use UnLanedet in your research, please use the following BibTeX entry.
 
