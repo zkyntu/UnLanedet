@@ -71,10 +71,10 @@ This file documents a collection of baselines trained with UnLanedet. All models
 <tr><td align="center">BezierNet</td>
 <td align="center">CVPR</td>
 <td align="center">ResNet18</td>
-<td align="center">-</td>
+<td align="center">94.55</td>
 <td align="center"><a href="../config/beziernet/resnet18_tusimple.py">file</a></td>
-<td align="center">-</a></td>
-<td align="center">-</a></td>
+<td align="center"><a href="https://github.com/zkyntu/UnLanedet/releases/download/Weights/beizernet_model_best.pth">model.pth</a></td>
+<td align="center"><a href="https://github.com/zkyntu/UnLanedet/releases/download/Weights/beziernet_tusimple_log.txt">train.log</a></td>
 </tr>
 </tbody></table>
 
