@@ -1,3 +1,4 @@
+import math
 import random
 import cv2
 import numpy as np
@@ -5,11 +6,20 @@ import torch
 import numbers
 import collections
 from PIL import Image
+from collections.abc import Sequence
+from .datacontainer import DataContainer as DC 
 
 try:
     collections = collections.abc
 except:
     pass
+
+def is_str(x):
+    """Whether the input is an string instance.
+
+    Note: This method is deprecated since python 2 is no longer supported.
+    """
+    return isinstance(x, str)
 
 def to_tensor(data):
     """Convert objects of various python types to :obj:`torch.Tensor`.
@@ -24,6 +34,8 @@ def to_tensor(data):
 
     if isinstance(data, torch.Tensor):
         return data
+    elif isinstance(data, Sequence) and not is_str(data):
+        return torch.tensor(data)
     elif isinstance(data, np.ndarray):
         return torch.from_numpy(data)
     elif isinstance(data, int):
@@ -33,6 +45,26 @@ def to_tensor(data):
     else:
         raise TypeError(f'type {type(data)} cannot be converted to tensor.')
 
+class DCToTensor(object):
+    def __init__(self, keys=['img', 'mask'], collect_keys=[], cfg=None):
+        self.keys = keys
+        self.collect_keys = collect_keys
+
+    def __call__(self, sample):
+        data = {}
+        if len(sample['img'].shape) < 3:
+            sample['img'] = np.expand_dims(sample['img'], -1)
+        for key in sample.keys():
+            if isinstance(sample[key], list) or isinstance(sample[key], dict):
+                data[key] = sample[key]
+                continue
+            if key in self.keys:
+                data[key] = DC(to_tensor(sample[key]),stack=False)
+            if key in self.collect_keys:
+                data[key] = sample[key]
+        data['img'] = data['img'].permute(2, 0, 1)
+        return data
+    
 class ListToTensor(object):
     def __init__(self, keys=['img', 'mask'], collect_keys=[], cfg=None):
         self.keys = keys
@@ -47,7 +79,10 @@ class ListToTensor(object):
                 data[key] = sample[key]
                 continue
             if key in self.keys:
-                data[key] = to_tensor(sample[key])
+                if isinstance(sample[key],DC):
+                    data[key] = sample[key]
+                else:
+                    data[key] = to_tensor(sample[key])
             if key in self.collect_keys:
                 data[key] = sample[key]
         data['img'] = data['img'].permute(2, 0, 1)
@@ -297,3 +332,91 @@ class Preprocess(object):
             if data is None:
                 return None
         return data
+
+class RandomAffine:
+    def __init__(self, affine_ratio, degrees=10, translate=.1, scale=.1, shear=10, perspective=0.0, border=(0, 0),keys=[]):
+        assert 0 <= affine_ratio <= 1
+        self.affine_ratio = affine_ratio
+        self.degrees = degrees
+        self.translate = translate
+        self.scale = scale
+        self.shear = shear
+        self.perspective = perspective
+        self.border = border
+        self.key_list = keys
+
+    def _transform_data(self, results, M, width, height):
+        # transform img
+        img = results["img"].copy()
+        if (self.border[0] != 0) or (self.border[1] != 0) or (M != np.eye(3)).any():  # image changed
+            if self.perspective:
+                im = cv2.warpPerspective(img, M, dsize=(width, height), borderValue=(0, 0, 0))
+            else:  # affine
+                im = cv2.warpAffine(img, M[:2], dsize=(width, height), borderValue=(0, 0, 0))
+        results["img"] = im
+
+        # transform lane
+        for key in self.key_list:
+            lanes = results[key].copy()
+            new_lanes = []
+            for lane in lanes:
+                new_lane = []
+                for p in lane:
+                    p = np.expand_dims(np.array(p), axis=1)    # (2, 1)
+                    p = np.concatenate((p, np.ones(shape=(1, 1), dtype=np.float)), axis=0)    # (3, 1)
+                    new_p = (M[:2] @ p).squeeze().tolist()
+                    new_lane.append(new_p)
+                new_lanes.append(new_lane)
+            results[key] = new_lanes
+
+        # transform seg
+        for key in results.get('seg_fields', []):
+            seg = results[key].copy()
+            if (self.border[0] != 0) or (self.border[1] != 0) or (M != np.eye(3)).any():  # image changed
+                if self.perspective:
+                    seg = cv2.warpPerspective(seg, M, dsize=(width, height), flags=cv2.INTER_NEAREST, borderValue=0)
+                else:  # affine
+                    seg = cv2.warpAffine(seg, M[:2], dsize=(width, height), flags=cv2.INTER_NEAREST, borderValue=0)
+                results[key] = seg
+
+    def __call__(self, results):
+
+        if random.random() < self.affine_ratio:
+            img = results['img']
+            height = img.shape[0] + self.border[0] * 2
+            width = img.shape[1] + self.border[1] * 2
+
+            # Center
+            C = np.eye(3)
+            C[0, 2] = -img.shape[1] / 2  # x translation (pixels)
+            C[1, 2] = -img.shape[0] / 2  # y translation (pixels)
+
+            # Perspective
+            P = np.eye(3)
+            P[2, 0] = random.uniform(-self.perspective, self.perspective)  # x perspective (about y)
+            P[2, 1] = random.uniform(-self.perspective, self.perspective)  # y perspective (about x)
+
+            # Rotation and Scale
+            R = np.eye(3)
+            a = random.uniform(-self.degrees, self.degrees)
+            # a += random.choice([-180, -90, 0, 90])  # add 90deg rotations to small rotations
+            s = random.uniform(1 - self.scale, 1 + self.scale)
+            # s = 2 ** random.uniform(-scale, scale)
+            R[:2] = cv2.getRotationMatrix2D(angle=a, center=(0, 0), scale=s)
+
+            # Shear
+            S = np.eye(3)
+            S[0, 1] = math.tan(random.uniform(-self.shear, self.shear) * math.pi / 180)  # x shear (deg)
+            S[1, 0] = math.tan(random.uniform(-self.shear, self.shear) * math.pi / 180)  # y shear (deg)
+
+            # Translation
+            T = np.eye(3)
+            T[0, 2] = random.uniform(0.5 - self.translate, 0.5 + self.translate) * width  # x translation (pixels)
+            T[1, 2] = random.uniform(0.5 - self.translate, 0.5 + self.translate) * height  # y translation (pixels)
+
+            # Combined rotation matrix
+            M = T @ S @ R @ P @ C  # order of operations (right to left) is IMPORTANT
+            self._transform_data(results, M, width, height)
+
+
+        return results

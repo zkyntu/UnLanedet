@@ -17,6 +17,7 @@ from unlanedet.engine import (
 )
 from unlanedet.engine.defaults import create_ddp_model
 from unlanedet.data.transform import Preprocess
+from unlanedet.model.module.core.lane import Lane
 
 def mkdir(path):
     sub_dir = os.path.dirname(path)
@@ -60,7 +61,11 @@ def show(model,data,cfg):
     out_file = cfg.savedir
     if out_file:
         out_file = osp.join(out_file, osp.basename(data['img_path']))
-    lanes = [lane.to_array(cfg.param_config) for lane in data['lanes']]
+    if isinstance(data['lanes'][0],Lane):
+        lanes = [lane.to_array(cfg.param_config) for lane in data['lanes']]
+    else:
+        lanes = [np.array(lane, dtype=np.float32) for lane in data['lanes']]
+    # lanes = [lane.to_array(cfg.param_config) for lane in data['lanes']]
     imshow_lanes(data['ori_img'], lanes, show=False, out_file=out_file)
 
 def run(data,cfg,model):

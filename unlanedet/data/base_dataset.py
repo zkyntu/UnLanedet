@@ -7,6 +7,7 @@ from torch.utils.data import Dataset
 import torchvision
 import logging
 
+from ..model.module.core.lane import Lane
 from .transform.transforms import Preprocess
 from .transform import DataContainer as DC
 
@@ -43,7 +44,11 @@ class BaseDataset(Dataset):
             img = cv2.imread(os.path.join(self.data_root, img_name))
             out_file = os.path.join(work_dir, 'visualization',
                                 img_name.replace('/', '_'))
-            lanes = [lane.to_array(self.cfg) for lane in lanes]
+            if isinstance(lanes[0],Lane):
+                lanes = [lane.to_array(self.cfg) for lane in lanes]
+            else:
+                lanes = [np.array(lane, dtype=np.float32) for lane in lanes]
+            # lanes = [lane.to_array(self.cfg) for lane in lanes]
             imshow_lanes(img, lanes, out_file=out_file)
     
     def __len__(self):

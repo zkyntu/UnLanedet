@@ -1,3 +1,4 @@
+import torch
 import fvcore.nn.weight_init as weight_init
 from torch import nn
 
@@ -101,3 +102,81 @@ class DepthwiseSeparableConv2d(nn.Module):
 
     def forward(self, x):
         return self.pointwise(self.depthwise(x))
+    
+    
+class DilatedBottleneck(nn.Module):
+    def __init__(self,
+                 in_channels,
+                 mid_channels,
+                 dilation=1,
+                 ):
+        super(DilatedBottleneck, self).__init__()
+        self.conv1 = Conv2d(
+            in_channels=in_channels,
+            out_channels=mid_channels,
+            kernel_size=1,
+            stride=1,
+            padding=0,
+            norm=get_norm("BN",mid_channels),
+            activation=nn.ReLU(),
+        )
+
+        self.conv2 = Conv2d(
+            in_channels=mid_channels,
+            out_channels=mid_channels,
+            kernel_size=3,
+            stride=1,
+            dilation=dilation,
+            padding=dilation,
+            norm=get_norm("BN",mid_channels),
+            activation=nn.ReLU(),
+        )
+
+        self.conv3 = Conv2d(
+            in_channels=mid_channels,
+            out_channels=in_channels,
+            kernel_size=1,
+            stride=1,
+            padding=0,
+            norm=get_norm("BN",in_channels),
+            activation=nn.ReLU(),
+        )
+
+    def forward(self, x: torch.Tensor) -> torch.Tensor:
+        """
+        :param x: (B, C, H, W)
+        :return:
+            out: (B, C, H, W)
+        """
+        identity = x
+        out = self.conv1(x)
+        out = self.conv2(out)
+        out = self.conv3(out)
+        out = out + identity
+
+        return out
+    
+class DilatedBlocks(nn.Module):
+    def __init__(self,
+                 in_channels=256,
+                 mid_channels=64,
+                 dilations=[4, 8]
+                 ):
+        super(DilatedBlocks, self).__init__()
+        if isinstance(dilations, int):
+            dilations = [dilations, ]
+
+        blocks = []
+        for dilation in dilations:
+            dilate_bottleneck = DilatedBottleneck(in_channels, mid_channels, dilation)
+            blocks.append(dilate_bottleneck)
+
+        self.dilated_blocks = nn.Sequential(*blocks)
+
+    def forward(self, x):
+        """
+        :param x: (B, C, H, W)
+        :return:
+            out: (B, C, H, W)
+        """
+        return self.dilated_blocks(x)

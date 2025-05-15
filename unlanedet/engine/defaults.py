@@ -133,6 +133,7 @@ def _highlight(code, filename):
     return code
 
 
+
 def default_setup(cfg, args):
     """
     Perform some basic common setups at the beginning of a job, including:
@@ -192,9 +193,14 @@ def default_setup(cfg, args):
     if fp32_precision != "":
         logger.info(f"Set fp32 precision to {fp32_precision}")
         _set_float32_precision(fp32_precision)
-        logger.info(f"{torch.get_float32_matmul_precision()=}")
-        logger.info(f"{torch.backends.cuda.matmul.allow_tf32=}")
-        logger.info(f"{torch.backends.cudnn.allow_tf32=}")
+        pres = torch.get_float32_matmul_precision()
+        allow = torch.backends.cuda.matmul.allow_tf32
+        cudn_all = torch.backends.cudnn.allow_tf32
+#        import pdb;pdb.set_trace()
+        logger.info(f"{pres}")
+        logger.info(f"{allow}")
+        logger.info(f"{cudn_all}")
+
 
 def default_writers(output_dir: str, max_iter: Optional[int] = None):
     """
