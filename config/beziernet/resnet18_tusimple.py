@@ -127,10 +127,10 @@ lr_multiplier = L(WarmupParamScheduler)(
 
 train_process = [
     L(RandomHorizontalFlip)(),
-    L(RandomAffine)(affine_ratio=0.7, degrees=10, translate=0.1, scale=0.2, shear=0.0,keys=['control_points'],norm_shape=(ori_img_h-cut_height,ori_img_w)),
+    L(RandomAffine)(affine_ratio=0.7, degrees=10, translate=0.1, scale=0.2, shear=0.0,keys=['control_points']),
     L(Resize)(size=(img_w, img_h)),
     L(Normalize)(img_norm=img_norm),
-    L(GenerateBezierInfo)(order=order, num_sample_points=100,cfg=param_config),
+    L(GenerateBezierInfo)(order=order, num_sample_points=100,cfg=param_config,norm_shape=(ori_img_h-cut_height,ori_img_w)),
     L(ListToTensor)(keys=['img', 'gt_control_points', 'lanes_labels', 'gt_semantic_seg'])
 ]
 
