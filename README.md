@@ -1,5 +1,5 @@
 # UnLanedet
-<font size=4> An advanced lane detection toolbox. UnLanedet contains many advanced lane detection methods to facilitate scientific research and lane detection applications. If you are in china, [gitee](https://gitee.com/zkyseured/UnLanedet) link may be helpful for you.
+<font size=4> An advanced lane detection toolbox. UnLanedet contains many advanced lane detection methods to facilitate scientific research and lane detection applications. If you are in China, [gitee](https://gitee.com/zkyseured/UnLanedet) link may be helpful for you.
 
 <div align="center">
   <img src="doc/Lane_Detection_Demo.jpg"/>
@@ -23,12 +23,12 @@
 <font size=3> See [Get Started documentation](scripts/TRAIN.md), including the data preparation, the training code, the evaluation code, the resume code, the inference code, and the advanced usage.
 
 ## Model Zoo and Baselines
-We provide a set of lane detection methods, including segmentation-based and anchor-based. All models and the corresponding weights and the training logs can be found in the [Model Zoo](doc/model_zpp.md).
+We provide a set of lane detection methods. All models and the corresponding weights and the training logs can be found in the [Model Zoo](doc/model_zpp.md).
 
 ## Advantages of UnLanedet
 Compared with other lane detection libraries, e.g., lanedet and PPLanedet, UnLanedet has two obvious advantages: 1) Distributed training is supported. 2) More pretrained models and datasets are provided.
 
-We do not depend on the third library, such as mmcv series, and all modules and functions can be found in the repo.
+We do not depend on third-party library, such as mmcv series, and all modules and functions can be found in the repo.
 
 ## License
 UnLanedet is released under the Apache 2.0 license.
@@ -39,9 +39,9 @@ We appreciate all contributions to UnLanedet and welcome pull requests to improv
 ## Acknowledgement
 UnLanedet is built upon [detectron2](https://github.com/facebookresearch/detectron2), [lanedet](https://github.com/Turoad/lanedet) and [PPLanedet](https://github.com/zkyseu/PPlanedet). Many thanks to their great work!
 
-The code of BeizerNet is modified from [mmLaneDet](https://github.com/Yzichen/mmLaneDet). Many thanks to authors.
+The code of BeizerNet is modified from [mmLaneDet](https://github.com/Yzichen/mmLaneDet). Many thanks to the authors.
 
-Some modules are borrowed from [detrex](https://github.com/IDEA-Research/detrex). Many thanks to authors.
+Some modules are borrowed from [detrex](https://github.com/IDEA-Research/detrex). Many thanks to the authors.
 
 ## Citing UnLanedet
 If you use UnLanedet in your research, please use the following BibTeX entry.
