@@ -16,7 +16,10 @@ def get_extensions():
     op_files = glob.glob('./unlanedet/layers/ops/csrc/*.c*')
     op_files_ad = glob.glob('./unlanedet/layers/ops/csrc/adnet/*.c*')
     op_files_sr = glob.glob('./unlanedet/layers/ops/csrc/srnet/*.c*')
-
+    op_files_dcn = glob.glob('./unlanedet/layers/ops/dcn/src/conv/*.c*')
+#    op_files_dcn_pool = glob.glob('./unlanedet/layers/ops/dcn/src/pool/*.c*')
+    
+    
     nms_ext_name = 'unlanedet.layers.ops.nms_impl'
     nms_ext_ops = CUDAExtension(
         name=nms_ext_name,
@@ -38,6 +41,30 @@ def get_extensions():
         sources=op_files_sr
     )
     extensions.append(nms_ad_ext_ops)
+
+    define_macros = []
+    define_macros += [('WITH_CUDA', None)]
+    extra_compile_args = {'cxx': []}
+    extra_compile_args['nvcc'] = [
+        '-D__CUDA_NO_HALF_OPERATORS__',
+        '-D__CUDA_NO_HALF_CONVERSIONS__',
+        '-D__CUDA_NO_HALF2_OPERATORS__',
+    ]
+    nms_dcn_ext_name = 'unlanedet.layers.ops.dcn.deform_conv_ext'
+    nms_dcn_ext_ops = CUDAExtension(
+        name=nms_dcn_ext_name,
+        sources=op_files_dcn,
+        define_macros=define_macros,
+        extra_compile_args=extra_compile_args
+    )
+    extensions.append(nms_dcn_ext_ops)
+    
+#    nms_dcn_pool_ext_name = 'unlanedet.layers.ops.dcn.deform_pool_ext'
+#    nms_dcn_pool_ext_ops = CUDAExtension(
+#        name=nms_dcn_pool_ext_name,
+#        sources=op_files_dcn_pool
+#    )
+#    extensions.append(nms_dcn_pool_ext_ops)
 
     return extensions
 

@@ -208,11 +208,12 @@ class AttentionLayer(nn.Module):
         out = out.view(m_batchsize, -1, height, width)
         proj_value = proj_value.view(m_batchsize, -1, height, width)
         out_feat = self.gamma * out + x
-        out_feat = F.relu(self.final_conv(out_feat))
+        out_feat = F.relu(self.final_conv(out_feat)
+)
         return out_feat
 
 class TransConvEncoderModule(nn.Module):
-    def __init__(self, in_dim, attn_in_dims, attn_out_dims, strides, ratios, downscale=True, pos_shape=None, cfg=None):
+    def __init__(self, attn_in_dims, attn_out_dims, strides, ratios, downscale=True, pos_shape=None, in_dim=None,cfg=None):
         super(TransConvEncoderModule, self).__init__()
         if downscale:
             stride = 2
