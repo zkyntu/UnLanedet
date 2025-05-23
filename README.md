@@ -7,7 +7,7 @@
 <br>
 
 ## What's New 
-* <font size=3> [2025-05-23] We support GANet, a keypoint-based method, and support modulated DCN in mmcv.
+* <font size=3> [2025-05-23] We support GANet, a keypoint-based method, and modulated DCN in mmcv.
 * <font size=3> [2025-05-14] We release v3 version. In this version, we support BezierNet, a parameter-based method.
 * <font size=3> [2025-05-07] We support SRLane, a high-performance model with fast inference speed. Training on the custom dataset is provided in the advanced usage.
 * <font size=3> [2025-04-24] We support distributed training (DDP) and provide the CLRNet-R50 model.
