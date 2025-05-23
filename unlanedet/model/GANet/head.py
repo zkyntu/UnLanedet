@@ -178,32 +178,12 @@ class GANetHead(nn.Module):
         gt_sp_offset = gt_targets['gt_sp_offset'].to(kpts_hm.device)
         kp_offset_mask = gt_targets['kp_offset_mask'].to(kpts_hm.device)
         sp_offset_mask = gt_targets['sp_offset_mask'].to(kpts_hm.device)
-        # gt_kpts_hm = torch.from_numpy(np.stack([target['gt_kpts_hm'] for target in gt_targets], axis=0)).to(
-        #     kpts_hm.device)   # (B, 1, H3, W3)
-        # gt_kp_offset = torch.from_numpy(np.stack([target['gt_kp_offset'] for target in gt_targets], axis=0)).to(
-        #     kpts_hm.device)   # (B, 2, H3, W3)
-        # gt_sp_offset = torch.from_numpy(np.stack([target['gt_sp_offset'] for target in gt_targets], axis=0)).to(
-        #     kpts_hm.device)   # (B, 2, H3, W3)
-        # kp_offset_mask = torch.from_numpy(np.stack([target['kp_offset_mask'] for target in gt_targets], axis=0)).to(
-        #     kpts_hm.device)   # (B, 2, H3, W3)
-        # sp_offset_mask = torch.from_numpy(np.stack([target['sp_offset_mask'] for target in gt_targets], axis=0)).to(
-        #     kpts_hm.device)   # (B, 2, H3, W3)
 
         gt_hm_lanes = dict()
-#        import pdb;pdb.set_trace()
         gt_hm_lanes = gt_targets['gt_hm_lanes']
-#        for k in gt_targets[0]['gt_hm_lanes'].keys():
-#            gt_hm_lanes[k] = torch.from_numpy(np.stack([target['gt_hm_lanes'][k] for target in gt_targets], axis=0)).to(
-#                kpts_hm.device)     # (B, max_lane_num,  N_sample, 2)
-        # 'gt_hm_lanes': dict{
-        #    0: (B, max_num_lanes, N_sample0, 2)     2: (y, x)
-        #    1: (B, max_num_lanes, N_sample1, 2)
-        #    2: (B, max_num_lanes, N_sample2, 2)
-        # }
 
         # 1. heatmap loss
         avg_factor = max(1, gt_kpts_hm.eq(1).sum())
-#        import pdb;pdb.set_trace()
         loss_heatmap = self.loss_heatmap(kpts_hm, gt_kpts_hm, avg_factor=avg_factor)
 
         # 2. compensation offset loss
