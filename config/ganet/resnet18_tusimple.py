@@ -135,6 +135,7 @@ train_process = [
             hm_idx=0,
             fpn_down_scale=[8, 16, 32],
             sample_per_lane=[41, 21, 11],),
+        norm_shape = (ori_img_h-cut_height,ori_img_w),
         cfg=param_config),
     L(ToTensor)(keys=['img'],collect_keys=['gt_hm_lanes', 'gt_kpts_hm','gt_kp_offset','gt_sp_offset','kp_offset_mask','sp_offset_mask']),
 ]
