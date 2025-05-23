@@ -309,7 +309,7 @@ class RandomHorizontalFlip(object):
                     for p in lane:
                         new_lane.append(((width - 1) - p[0], p[1]))
                     new_lanes.append(new_lane)
-
+                sample['lanes'] = new_lanes
         return sample
 
 class Normalize(object):
