@@ -20,6 +20,7 @@ class GenerateGAInfo(object):
                      fpn_down_scale=[8, 16, 32],
                      sample_per_lane=[41, 21, 11],
                  ),
+                 norm_shape=None,
                  cfg=None
                  ):
         self.radius = radius
@@ -30,6 +31,7 @@ class GenerateGAInfo(object):
         self.hm_down_scale = self.fpn_down_scale[self.hm_idx]
         self.fpn_layer_num = len(self.fpn_down_scale)
         self.cfg = cfg
+        self.norm_shape = norm_shape
 
     def ploy_fitting_cube(self, line, h, w, sample_num=100):
         """
@@ -158,10 +160,20 @@ class GenerateGAInfo(object):
         return heatmap
 
     def _transform_annotation(self, results):
-        img_h, img_w = self.cfg.img_h, self.cfg.img_w
+        ori_img_h, ori_img_w = self.norm_shape
+        img_h,img_w = self.cfg.img_h,self.cfg.img_w
         max_lanes = self.cfg.max_lanes
 
         gt_lanes = results['lanes']  # List[List[(x0, y0), (x1, y1), ...], List[(x0, y0), (x1, y1), ...], ...]
+        
+        scale_factor = ((img_w/ori_img_w),(img_h/ori_img_h))
+        new_lanes = []
+        for lane in results['lanes']:
+            new_lane = []
+            for p in lane:
+                new_lane.append((p[0]*scale_factor[0], p[1]*scale_factor[1]))
+            new_lanes.append(new_lane)
+        gt_lanes = new_lanes
 
         # 遍历 fpn levels, 寻找每个车道线在该level特征图上对应采样点的位置.
         gt_hm_lanes = {}
@@ -250,4 +262,5 @@ class GenerateGAInfo(object):
     def __call__(self, results):
         targets = self._transform_annotation(results)
         results.update(targets)
+#        print(results.keys())
         return results
