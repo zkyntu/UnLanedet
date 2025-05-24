@@ -7,3 +7,4 @@ from .datacontainer import DataContainer
 from .collect_hm import CollectHm
 from .bezier_transforms import Lanes2ControlPoints,GenerateBezierInfo,DefaultFormatBundle
 from .test_time_aug import MultiScaleFlipAug
+from .generate_ga_lane import GenerateGAInfo

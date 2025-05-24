@@ -300,6 +300,16 @@ class RandomHorizontalFlip(object):
         if v < 0.5:
             sample['img'] = np.fliplr(sample['img'])
             if 'mask' in sample: sample['mask'] = np.fliplr(sample['mask'])
+            if 'lanes' in sample:
+                width = sample['img'].shape[1]
+                lanes = sample['lanes']
+                new_lanes = []
+                for lane in lanes:
+                    new_lane = []
+                    for p in lane:
+                        new_lane.append(((width - 1) - p[0], p[1]))
+                    new_lanes.append(new_lane)
+                sample['lanes'] = new_lanes
         return sample
 
 class Normalize(object):

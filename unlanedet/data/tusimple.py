@@ -140,3 +140,40 @@ class BiazerTusimple(TuSimple):
         sample.update({'meta': meta})
 
         return sample 
+
+class TusimpleCropBefore(TuSimple):
+    def __getitem__(self, idx):
+        data_info = self.data_infos[idx]
+        if not osp.isfile(data_info['img_path']):
+            raise FileNotFoundError('cannot find file: {}'.format(data_info['img_path']))
+
+        img = cv2.imread(data_info['img_path'])
+
+        img = img[self.cut_height:, :, :]
+        sample = data_info.copy()
+        sample.update({'img': img})
+
+        if self.training:
+            label = cv2.imread(sample['mask_path'], cv2.IMREAD_UNCHANGED)
+            if len(label.shape) > 2:
+                label = label[:, :, 0]
+            label = label.squeeze()
+            label = label[self.cut_height:, :]
+            sample.update({'mask': label})
+            
+            if self.cut_height != 0:
+                new_lanes = []
+                for i in sample['lanes']:
+                    lanes = []
+                    for p in i:
+                        lanes.append((p[0], p[1] - self.cut_height))
+                    new_lanes.append(lanes)
+                sample.update({'lanes': new_lanes})
+
+        sample = self.processes(sample)
+        meta = {'full_img_path': data_info['img_path'],
+                'img_name': data_info['img_name']}
+        meta = DC(meta, cpu_only=True)
+        sample.update({'meta': meta})
+
+        return sample 
