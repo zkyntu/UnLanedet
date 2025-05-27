@@ -10,3 +10,4 @@ scikit-image
 p_tqdm
 tensorboard
 timm
+einops
