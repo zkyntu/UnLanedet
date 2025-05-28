@@ -82,17 +82,17 @@ This file documents a collection of baselines trained with UnLanedet. All models
 <td align="center">ResNet18</td>
 <td align="center">96.18</td>
 <td align="center"><a href="../config/ganet/resnet18_tusimple.py">file</a></td>
-<td align="center"><a href="https://github.com/zkyntu/UnLanedet/releases/download/Weights/ganet_r18_tusimple_model_best.pt">model.pth</a></td>
+<td align="center"><a href="https://github.com/zkyntu/UnLanedet/releases/download/Weights/ganet_r18_tusimple_model_best.pth">model.pth</a></td>
 <td align="center"><a href="https://github.com/zkyntu/UnLanedet/releases/download/Weights/ganet_r18_tusimple.txt">train.log</a></td>
 </tr>
 </tr>
 <tr><td align="center">GSENet</td>
 <td align="center">AAAI</td>
 <td align="center">ResNet18</td>
-<td align="center">-</td>
+<td align="center">96.16</td>
 <td align="center"><a href="../config/gsenet/resnet18_tusimple.py">file</a></td>
-<td align="center">-</td>
-<td align="center">-</td>
+<td align="center"><a href="https://github.com/zkyntu/UnLanedet/releases/download/Weights/gsenet_r18_tusimple.pth">model.pth</a></td>
+<td align="center"><a href="https://github.com/zkyntu/UnLanedet/releases/download/Weights/gsenet_r18_tusimple.txt">train.log</a></td>
 </tr>
 </tbody></table>
 
