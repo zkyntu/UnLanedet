@@ -321,6 +321,23 @@ Note: UnLanedet is built on lazy configuration. Therefore, UnLanedet does not re
 2. If you are having difficulty in converting the dataset format, you can refer to the following instructions: 1) Create the Dataset class following [Tusimple](../unlanedet/data/tusimple.py), [CULane](../unlanedet/data/tusimple.py), or [BaseDataset](../unlanedet/data/base_dataset.py). 2) Create the evaluator following [TusimpleEvaluator](../unlanedet/evaluation/evaluator.py#L73-L126). The most important step is implementing the ```evaluate``` function. 3) Importing the dataset and evaluator in the config file.
 </details>
 
+<details>
+<summary>Model analysis</summary>
+
+Tha parameter, flops, structure, and activation of the model can be obtained by
+
+```Shell
+python tools/analysis.py --config-file config_path --ckpt model_path --tasks task_name
+
+#task_name is ["flop", "activation", "parameter", "structure"]
+#example
+#python tools/analysis.py --config-file config/gsenet/resnet18_tusimple.py --ckpt output/saved.pth --tasks flop
+
+```
+
+
+</details>
+
 ## Components
 The following table shows the components of UnLanedet.
 
