@@ -177,3 +177,8 @@ This file documents a collection of baselines trained with UnLanedet. All models
 </tbody></table>
 
 **Note**: 1) All models are trained from scratch. 2) Check the log file using the following codes: ```cat xxx.log``` (linux) or ```type xxx.log``` (windows). 3) The performance of the model is not fully aligned with the original paper due to the time limit.
+
+If you use ConvNext as the backbone, please first download the pretrained weight from [official repo](https://github.com/facebookresearch/ConvNeXt) and then convert the pretrained weight to UnLanedet format by 
+```Shell
+python tools/convert_weight_ld.py convnext_tiny_1k_224.pth convert_weight.pth
+```
