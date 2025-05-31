@@ -7,6 +7,7 @@
 <br>
 
 ## What's New 
+* <font size=3> [2025-05-27] We support ConvNext backbone and release CLRNet-ConvNext-Tiny with 80.21 F1 score on CULane.
 * <font size=3> [2025-05-27] We support GSENet and provide the [model analysis tools](./tools/analysis.py).
 * <font size=3> [2025-05-23] We support GANet, a keypoint-based method, and modulated DCN in mmcv.
 * <font size=3> [2025-05-14] We release v3 version. In this version, we support BezierNet, a parameter-based method.
