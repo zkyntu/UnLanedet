@@ -130,6 +130,13 @@ This file documents a collection of baselines trained with UnLanedet. All models
 <td align="center"><a href="../config/clrnet/resnet50_culane.py">file</a></td>
 <td align="center"><a href="https://github.com/zkyntu/UnLanedet/releases/download/Weights/clrnet_model_best_culane.pth">model.pth</a></td>
 <td align="center"><a href="https://github.com/zkyntu/UnLanedet/releases/download/Weights/clrnet_r50_culane_log.txt">train.log</a></td>
+<tr><td align="center">CLRNet</td>
+<td align="center">CVPR</td>
+<td align="center">ConvNexT-Tiny</td>
+<td align="center">80.21</td>
+<td align="center"><a href="../config/clrnet/convnext_culane.py">file</a></td>
+<td align="center"><a href="https://github.com/zkyntu/UnLanedet/releases/download/Weights/clrnet_convnext_culane.pth">model.pth</a></td>
+<td align="center"><a href="https://github.com/zkyntu/UnLanedet/releases/download/Weights/clrnet_convnext_culane.txt">train.log</a></td>
 <tr><td align="center">CondLaneNet</td>
 <td align="center">ICCV</td>
 <td align="center">ResNet50</td>
@@ -177,3 +184,8 @@ This file documents a collection of baselines trained with UnLanedet. All models
 </tbody></table>
 
 **Note**: 1) All models are trained from scratch. 2) Check the log file using the following codes: ```cat xxx.log``` (linux) or ```type xxx.log``` (windows). 3) The performance of the model is not fully aligned with the original paper due to the time limit.
+
+If you use ConvNext as the backbone, please first download the pretrained weight from [official repo](https://github.com/facebookresearch/ConvNeXt) and then convert the pretrained weight to UnLanedet format by 
+```Shell
+python tools/convert_weight_ld.py convnext_tiny_1k_224.pth convert_weight.pth
+```
