@@ -89,7 +89,7 @@ total_iter = epoch_per_iter * epochs
 train.max_iter = total_iter
 train.checkpointer.period=epoch_per_iter
 train.eval_period = epoch_per_iter
-train.init_checkpoint="https://dl.fbaipublicfiles.com/convnext/convnext_small_1k_224.pth"
+train.init_checkpoint="./convert_weight.pth" # the converted weight
 
 optimizer = get_config("config/common/optim.py").AdamW
 optimizer.lr = 0.6e-3
