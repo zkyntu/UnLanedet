@@ -151,6 +151,13 @@ This file documents a collection of baselines trained with UnLanedet. All models
 <td align="center"><a href="../config/clrernet/resnet34_culane.py">file</a></td>
 <td align="center"><a href="https://github.com/zkyntu/UnLanedet/releases/download/Weights/clrernet_model_best_culane.pth">model.pth</a></td>
 <td align="center"><a href="https://github.com/zkyntu/UnLanedet/releases/download/Weights/clrernet_log_culane.txt">train.log</a></td>
+<tr><td align="center">CLRerNet</td>
+<td align="center">WACV</td>
+<td align="center">ConvNexT-Tiny</td>
+<td align="center">79.89</td>
+<td align="center"><a href="../config/clrernet/convnext_culane.py">file</a></td>
+<td align="center"><a href="https://github.com/zkyntu/UnLanedet/releases/download/Weights/clrernet_model_best_culane.pth">model.pth</a></td>
+<td align="center"><a href="https://github.com/zkyntu/UnLanedet/releases/download/Weights/clrernet_log_culane.txt">train.log</a></td>
 <tr><td align="center">ADNet</td>
 <td align="center">ICCV</td>
 <td align="center">ResNet34</td>
