@@ -63,6 +63,7 @@ class DepthwiseSeparableConv2d(nn.Module):
         kernel_size=3,
         padding=1,
         dilation=1,
+        stride=1,
         *,
         norm1=None,
         activation1=None,
@@ -83,16 +84,18 @@ class DepthwiseSeparableConv2d(nn.Module):
             padding=padding,
             dilation=dilation,
             groups=in_channels,
+            stride = stride,
             bias=not norm1,
-            norm=get_norm(norm1, in_channels),
+            norm=get_norm(norm1, out_channels = in_channels),
             activation=activation1,
         )
         self.pointwise = Conv2d(
             in_channels,
             out_channels,
             kernel_size=1,
+            stride = stride,
             bias=not norm2,
-            norm=get_norm(norm2, out_channels),
+            norm=get_norm(norm2, out_channels = out_channels),
             activation=activation2,
         )
 
@@ -103,6 +106,7 @@ class DepthwiseSeparableConv2d(nn.Module):
     def forward(self, x):
         return self.pointwise(self.depthwise(x))
     
+
     
 class DilatedBottleneck(nn.Module):
     def __init__(self,
