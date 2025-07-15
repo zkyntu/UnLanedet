@@ -7,6 +7,7 @@
 <br>
 
 ## What's New 
+* <font size=3> [2025-07-15] We release the paper of UnLanedet: [paper_link](doc/paper.pdf). Arxiv version is coming soon.
 * <font size=3> [2025-05-30] We support DLA34 and ConvNexT backbone. CLRNet with ConvNext-Tiny gets 80.21 F1 score on CULane.
 * <font size=3> [2025-05-27] We support GSENet and provide the [model analysis tools](./tools/analysis.py).
 * <font size=3> [2025-05-23] We support GANet, a keypoint-based method, and modulated DCN in mmcv.
