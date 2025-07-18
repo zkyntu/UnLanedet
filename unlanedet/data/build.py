@@ -1,5 +1,6 @@
 import torch
 import torch.utils.data as torchdata
+from torch.utils.data.distributed import DistributedSampler
 import logging
 from functools import partial
 
@@ -53,21 +54,32 @@ def build_batch_data_loader(
         iterable[list]. Length of each list is the batch size of the current
             GPU. Each element in the list comes from the dataset.
     """
-    if single_gpu_batch_size:
-        if total_batch_size:
-            raise ValueError(
-                """total_batch_size and single_gpu_batch_size are mutually incompatible.
-                Please specify only one. """
-            )
-        batch_size = single_gpu_batch_size
+    world_size = get_world_size()
+    if world_size == 1:
+        # if total_batch_size:
+        #     raise ValueError(
+        #         """total_batch_size and single_gpu_batch_size are mutually incompatible.
+        #         Please specify only one. """
+        #     )
+        batch_size = total_batch_size
+        sampler = None
     else:
         world_size = get_world_size()
+        rank = get_rank()
         assert (
             total_batch_size > 0 and total_batch_size % world_size == 0
         ), "Total batch size ({}) must be divisible by the number of gpus ({}).".format(
             total_batch_size, world_size
         )
         batch_size = total_batch_size // world_size
+        sampler = DistributedSampler(
+            dataset,
+            num_replicas=world_size,
+            rank=rank,
+            shuffle=shuffle,
+            drop_last=drop_last,
+        )
+        shuffle = False  
     logger = logging.getLogger(__name__)
     logger.info("Making batched data loader with batch_size=%d", batch_size)
 
@@ -79,6 +91,7 @@ def build_batch_data_loader(
     return torchdata.DataLoader(
         dataset,
         batch_size=batch_size,
+        sampler=sampler,
         drop_last=drop_last,
         num_workers=num_workers,
         collate_fn=partial(collate,samples_per_gpu=batch_size),
