@@ -10,6 +10,7 @@ from contextlib import ExitStack, contextmanager
 from typing import List, Union
 import torch
 from torch import nn
+from torch.utils.data.distributed import DistributedSampler
 
 from . import culane_metric
 from .tusimple_metric import LaneEval
@@ -435,9 +436,16 @@ def inference_on_dataset(
     Returns:
         The return value of `evaluator.evaluate()`
     """
+    # Import comm functions for distributed support
+    from ..utils.comm import get_world_size, get_rank, is_main_process, all_gather, gather, synchronize
+    
     num_devices = get_world_size()
+    current_rank = get_rank()
     logger = logging.getLogger(__name__)
-    logger.info("Start inference on {} batches".format(len(data_loader)))
+    
+    # Only log from main process to avoid duplicate logs
+    if is_main_process():
+        logger.info("Start inference on {} batches".format(len(data_loader)))
 
     total = len(data_loader)  # inference data loader must have a fixed length
     if evaluator is None:
@@ -446,6 +454,8 @@ def inference_on_dataset(
     if isinstance(evaluator, abc.MutableSequence):
         evaluator = DatasetEvaluators(evaluator)
     dataset = data_loader.dataset
+    sampler = data_loader.sampler
+    batch_sampler = data_loader.batch_sampler
     evaluator.data_infos = dataset.data_infos
     evaluator.reset()
     is_view = evaluator.view if hasattr(evaluator,"view") else False
@@ -456,6 +466,11 @@ def inference_on_dataset(
     total_compute_time = 0
     total_eval_time = 0
     prediction = []
+    prediction_indices = []  # Store indices for reordering
+    
+    # Synchronize all processes before starting inference
+    synchronize()
+    
     with ExitStack() as stack:
         if isinstance(model, nn.Module):
             stack.enter_context(inference_context(model))
@@ -463,7 +478,9 @@ def inference_on_dataset(
 
         start_data_time = time.perf_counter()
         dict.get(callbacks or {}, "on_start", lambda: None)()
-        for idx, inputs in enumerate(data_loader):
+        
+        # Iterate through data_loader with batch indices
+        for idx, (batch_indices, inputs) in enumerate(zip(batch_sampler, data_loader)):
             total_data_time += time.perf_counter() - start_data_time
             if idx == num_warmup:
                 start_time = time.perf_counter()
@@ -485,6 +502,8 @@ def inference_on_dataset(
 
             start_eval_time = time.perf_counter()
             prediction.extend(outputs)
+            prediction_indices.extend(batch_indices)  # Store batch indices
+            
             if is_view:
                 dataset.view(outputs,inputs['meta'],"viz")
             # evaluator.process(inputs, outputs)
@@ -495,7 +514,9 @@ def inference_on_dataset(
             compute_seconds_per_iter = total_compute_time / iters_after_start
             eval_seconds_per_iter = total_eval_time / iters_after_start
             total_seconds_per_iter = (time.perf_counter() - start_time) / iters_after_start
-            if idx >= num_warmup * 2 or compute_seconds_per_iter > 5:
+            
+            # Only log from main process to reduce log spam
+            if is_main_process() and (idx >= num_warmup * 2 or compute_seconds_per_iter > 5):
                 eta = datetime.timedelta(seconds=int(total_seconds_per_iter * (total - idx - 1)))
                 log_every_n_seconds(
                     logging.INFO,
@@ -512,24 +533,90 @@ def inference_on_dataset(
             start_data_time = time.perf_counter()
         dict.get(callbacks or {}, "on_end", lambda: None)()
 
+    # Synchronize all processes before gathering results
+    synchronize()
+
     # Measure the time only for this worker (before the synchronization barrier)
     total_time = time.perf_counter() - start_time
     total_time_str = str(datetime.timedelta(seconds=total_time))
-    # NOTE this format is parsed by grep
-    logger.info(
-        "Total inference time: {} ({:.6f} s / iter per device, on {} devices)".format(
-            total_time_str, total_time / (total - num_warmup), num_devices
-        )
-    )
-    total_compute_time_str = str(datetime.timedelta(seconds=int(total_compute_time)))
-    logger.info(
-        "Total inference pure compute time: {} ({:.6f} s / iter per device, on {} devices)".format(
-            total_compute_time_str, total_compute_time / (total - num_warmup), num_devices
-        )
-    )
     
-    # for evaluation
-    results = evaluator.evaluate(prediction)
+    # Only log from main process
+    if is_main_process():
+        logger.info(
+            "Total inference time: {} ({:.6f} s / iter per device, on {} devices)".format(
+                total_time_str, total_time / (total - num_warmup), num_devices
+            )
+        )
+        total_compute_time_str = str(datetime.timedelta(seconds=int(total_compute_time)))
+        logger.info(
+            "Total inference pure compute time: {} ({:.6f} s / iter per device, on {} devices)".format(
+                total_compute_time_str, total_compute_time / (total - num_warmup), num_devices
+            )
+        )
+    
+    # Gather predictions from all processes for distributed evaluation
+    if num_devices > 1:
+        # Check if distributed sampler is being used
+        is_using_distributed_sampler = isinstance(sampler, DistributedSampler)
+        
+        if is_using_distributed_sampler:
+            # With DistributedSampler: each process has different data, need to gather
+            all_predictions = gather(prediction)
+            all_indices = gather(prediction_indices)
+            
+            if is_main_process():
+                # Flatten and create index-prediction pairs
+                flat_predictions = [pred for pred_list in all_predictions for pred in pred_list]
+                flat_indices = [idx for idx_list in all_indices for idx in idx_list]
+            
+                # Reorder predictions according to original dataset order
+                if flat_indices and flat_predictions:
+                    indexed_predictions = list(zip(flat_indices, flat_predictions))
+                    indexed_predictions.sort(key=lambda x: x[0])
+                    prediction = [pred for idx, pred in indexed_predictions]
+                else:
+                    prediction = flat_predictions
+            else:
+                prediction = []
+            
+            if is_main_process():
+                logger.info(f"Distributed evaluation: gathered and reordered {len(prediction)} predictions from {num_devices} processes")
+        else:
+            # Without DistributedSampler: all processes have same data, causing duplication
+            logger.warning(
+                "Distributed training detected but DistributedSampler not used! "
+                "This will cause data duplication and incorrect evaluation results. "
+                "Consider using DistributedSampler for proper distributed evaluation."
+            )
+            # Only use predictions from main process to avoid duplication
+            if not is_main_process():
+                prediction = []
+            else:
+                # Still reorder predictions on main process if indices are available
+                if prediction_indices and prediction:
+                    indexed_predictions = list(zip(prediction_indices, prediction))
+                    indexed_predictions.sort(key=lambda x: x[0])
+                    prediction = [pred for idx, pred in indexed_predictions]
+                logger.info(f"Using predictions from main process only to avoid duplication: {len(prediction)} predictions")
+    else:
+        # Single process: reorder predictions according to batch indices
+        if prediction_indices and prediction:
+            indexed_predictions = list(zip(prediction_indices, prediction))
+            indexed_predictions.sort(key=lambda x: x[0])
+            prediction = [pred for idx, pred in indexed_predictions]
+    
+    # Synchronize before evaluation
+    synchronize()
+    
+    # for evaluation - only evaluate on main process or if evaluator supports distributed evaluation
+    if is_main_process() or getattr(evaluator, '_distributed', False):
+        results = evaluator.evaluate(prediction)
+    else:
+        results = None
+    
+    # Synchronize after evaluation
+    synchronize()
+    
     # An evaluator may return None when not in main process.
     # Replace it by an empty dict instead to make it easier for downstream code to handle
     if results is None:
