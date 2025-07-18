@@ -59,6 +59,46 @@ class CallbackHook(HookBase):
         if self._after_step:
             self._after_step(self.trainer)
 
+# This hook is used to set the epoch for DistributedSampler
+class SetEpochHook(HookBase):
+    """
+    Hook to set epoch for DistributedSampler before each epoch starts.
+    """
+
+    def __init__(self, dataloader):
+        self.sampler = dataloader.sampler
+        self.dataloader = dataloader
+        self._steps_per_epoch = None
+        self._last_epoch_set = -1
+
+    @property
+    def steps_per_epoch(self):
+        """计算每个epoch包含的步数"""
+        if self._steps_per_epoch is None:
+            # 直接使用DataLoader的长度，这已经考虑了DistributedSampler的情况
+            self._steps_per_epoch = len(self.dataloader)
+        return self._steps_per_epoch
+
+    def get_current_epoch(self):
+        """基于当前iteration计算epoch"""
+        if self.trainer.iter == 0:
+            return 0
+        return self.trainer.iter // self.steps_per_epoch
+
+    def is_epoch_start(self):
+        """判断是否是新epoch的开始"""
+        return self.trainer.iter % self.steps_per_epoch == 0
+
+    def before_step(self):
+        if hasattr(self.sampler, "set_epoch"):
+            current_epoch = self.get_current_epoch()
+            
+            if self.is_epoch_start() and current_epoch != self._last_epoch_set:
+                self.sampler.set_epoch(current_epoch)
+                self._last_epoch_set = current_epoch
+                
+                logger = logging.getLogger(__name__)
+                logger.debug(f"Set sampler epoch to {current_epoch} at iteration {self.trainer.iter}")
 
 class IterationTimer(HookBase):
     """
