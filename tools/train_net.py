@@ -22,6 +22,16 @@ logger = logging.getLogger("unlanedet")
 
 def do_test(cfg, model):
     if "evaluator" in cfg.dataloader:
+        # Convert to SyncBatchNorm if in distributed mode and not already converted
+        if comm.get_world_size() > 1:
+            import torch
+            # Check if model already has SyncBatchNorm modules
+            has_sync_bn = any(isinstance(module, torch.nn.SyncBatchNorm) 
+                            for module in model.modules())
+            if not has_sync_bn:
+                logger.info("Converting model to use SyncBatchNorm for evaluation")
+                model = torch.nn.SyncBatchNorm.convert_sync_batchnorm(model)
+        
         ret = inference_on_dataset(
             model,
             instantiate(cfg.dataloader.test),
@@ -55,6 +65,10 @@ def do_train(args, cfg):
     logger.info("Model:\n{}".format(model))
     model.to(cfg.train.device)
 
+    if comm.get_world_size() > 1:
+        import torch
+        logger.info("Converting model to use SyncBatchNorm")
+        model = torch.nn.SyncBatchNorm.convert_sync_batchnorm(model)
     cfg_copy = copy.deepcopy(cfg)
     cfg_copy.optimizer.params.model = model
     optim = instantiate(cfg_copy.optimizer)
