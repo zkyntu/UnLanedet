@@ -7,6 +7,7 @@ from functools import partial
 from .transform.collate import collate
 #from ..config import configurable
 from ..utils.comm import get_world_size
+from ..utils.comm import get_rank
 from ..utils.env import seed_all_rng
 from ..evaluation.vil_utils import CustomBatchSampler,CustomSamper
 
