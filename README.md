@@ -7,7 +7,7 @@
 <br>
 
 ## What's New 
-* <font size=3> [2025-07-18] We release the technical report of UnLanedet: [paper_link](https://www.preprints.org/manuscript/202507.1610/v1).
+* <font size=3> [2025-07-21] We release the technical report of UnLanedet: [paper_link](https://www.preprints.org/manuscript/202507.1610/v1).
 * <font size=3> [2025-07-18] The latest distributed training code is provided. [PR link](https://github.com/zkyntu/UnLanedet/pull/53). Many thanks to the author.
 * <font size=3> [2025-05-30] We support DLA34 and ConvNexT backbone. CLRNet with ConvNext-Tiny gets 80.21 F1 score on CULane.
 * <font size=3> [2025-05-27] We support GSENet and provide the [model analysis tools](./tools/analysis.py).
